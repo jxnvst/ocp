@@ -33,7 +33,20 @@
   .meta { display:flex; gap:16px; margin-top:14px; font-size:13px; color:var(--muted); border-top:1px solid rgba(0,0,0,.06); padding-top:12px; }
   .thumbs { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
   .thumbs img { width:46px; height:46px; object-fit:cover; border-radius:8px; cursor:pointer; border:2px solid transparent; }
-  .thumbs img.on { border-color:var(--accent); }
+  .thumbs img.on { border-color: var(--accent); }
+  .carousel { position: relative; }
+  .carousel img { width:100%; height:100%; object-fit:cover; display:block; }
+  .czone { position:absolute; top:0; bottom:0; width:34%; cursor:pointer; z-index:2; opacity:0; transition:opacity .2s; display:flex; align-items:center; }
+  .czone.left { left:0; justify-content:flex-start; }
+  .czone.right { right:0; justify-content:flex-end; }
+  .carousel:hover .czone { opacity:1; }
+  .czone span { background:rgba(10,20,35,.45); color:#fff; font-size:20px; font-weight:800; padding:8px 13px; border-radius:999px; margin:0 10px; user-select:none; }
+  .czone.left span { margin-left:8px; }
+  .czone.right span { margin-right:8px; }
+  .drive-row { display:none; gap:8px; margin-top:10px; }
+  .drive-row input { flex:1; border:1px solid #d3dce6; border-radius:8px; padding:8px 10px; font-family:inherit; font-size:13px; }
+  .drive-row button { background:var(--accent); color:#fff; border:0; border-radius:8px; padding:8px 14px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+  .drive-note { font-size:12px; color:var(--accent); margin-top:6px; }
   footer { background:var(--primary); color:rgba(255,255,255,.7); text-align:center; padding:22px; font-size:13px; }
   .empty { text-align:center; color:var(--muted); padding:60px 0; }
   .empty a { color:var(--accent); }
@@ -79,10 +92,17 @@
       }).join("") : "";
       var card = document.createElement("div");
       card.className = "card";
+      card._photos = p.photos || [];
+      card._phidx = (typeof p.cover === "number" ? p.cover : 0);
       card.innerHTML =
-        '<div class="photo"><div class="tag">' + (p.property_type || "Property") + '</div>' +
+        '<div class="photo"><div class="carousel">' +
+        (cover ? '<img src="' + cover + '" alt="" class="mainimg">' : "") +
+        '<div class="czone left"><span>&#8249;</span></div>' +
+        '<div class="czone right"><span>&#8250;</span></div>' +
+        "</div>" +
+        '<div class="tag">' + (p.property_type || "Property") + '</div>' +
         (p.closed ? '<div class="closed">AVAILABLE - acquired ' + p.closed + "</div>" : "") +
-        (cover ? '<img src="' + cover + '" alt="" class="mainimg">' : "") + "</div>" +
+        "</div>" +
         '<div class="body">' +
         '<p class="addr">' + (p.address ? p.address : "") + (p.city ? ", " + p.city : "") + (p.state ? ", " + p.state : "") + "</p>" +
         '<div class="name">' + (p.title || p.address || "Property") + "</div>" +
@@ -98,18 +118,77 @@
         "</div>";
       grid.appendChild(card);
     });
-    // thumb click swaps the main photo
+    // thumb click swaps the main photo; carousel zones cycle left/right
     grid.addEventListener("click", function (e) {
-      if (e.target.classList && e.target.classList.contains("thumb")) {
-        var card = e.target.closest(".card");
-        var mainImg = card.querySelector(".mainimg");
-        if (mainImg) {
-          mainImg.src = e.target.src;
-          card.querySelectorAll(".thumb").forEach(function (t) { t.classList.remove("on"); });
-          e.target.classList.add("on");
+      var card = e.target.closest ? e.target.closest(".card") : null;
+      if (!card) return;
+      var mainImg = card.querySelector(".mainimg");
+      var zone = e.target.closest ? e.target.closest(".czone") : null;
+      if (zone) {
+        var ph = card._photos;
+        if (mainImg && ph && ph.length > 1) {
+          var dir = zone.classList.contains("right") ? 1 : -1;
+          card._phidx = (card._phidx + dir + ph.length) % ph.length;
+          mainImg.src = ph[card._phidx] ? ph[card._phidx] : mainImg.src;
+          card.querySelectorAll(".thumb").forEach(function (t, ti) {
+            t.classList.toggle("on", ti === card._phidx);
+          });
         }
+        return;
+      }
+      if (e.target.classList && e.target.classList.contains("thumb")) {
+        var imgs = card.querySelectorAll(".thumb");
+        imgs.forEach(function (t, ti) {
+          if (t === e.target) {
+            if (mainImg) mainImg.src = e.target.src;
+            card._phidx = ti;
+            t.classList.add("on");
+          } else {
+            t.classList.remove("on");
+          }
+        });
       }
     });
+
+    // Google Drive photos link queue (visible in edit mode: properties.html?edit=1)
+    if (/[?&]edit(?:=1)?($|&)/.test(location.search)) {
+      var PU = "https://tooambsacmhrlgpwgwsv.supabase.co/rest/v1/page_leads";
+      var PK = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvb2FtYnNhY21ocmxncHdnd3N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MTU4NjksImV4cCI6MjA5NzI5MTg2OX0.2votR41Hj8cww9fJgjjQHtdGZkFRYVTwbXYAk_6kkuo";
+      var PD = "358e74d4-570f-47e8-bafb-00e604fc80b6";
+      document.querySelectorAll(".card").forEach(function (card) {
+        var row = document.createElement("div");
+        row.className = "drive-row";
+        row.style.display = "flex";
+        row.innerHTML =
+          '<input placeholder="Paste Google Drive photos link" class="dl">' +
+          '<button type="button">Add Photos</button>' +
+          '<div class="drive-note"></div>';
+        card.appendChild(row);
+        var inp = row.querySelector(".dl");
+        var note = row.querySelector(".drive-note");
+        row.querySelector("button").addEventListener("click", function () {
+          var link = inp.value.trim();
+          if (!link) { note.textContent = "Paste a Google Drive link first."; return; }
+          var address = (card.querySelector(".addr") || {}).textContent || "";
+          note.textContent = "Queuing...";
+          fetch(PU, {
+            method: "POST",
+            headers: { "apikey": PK, "Authorization": "Bearer " + PK, "Content-Type": "application/json", "Prefer": "return=minimal" },
+            body: JSON.stringify({
+              landing_page_id: PD,
+              name: "OCP drive link",
+              message: link,
+              source: "onecompasspoint.com",
+              metadata: { kind: "ocp_drive_link", drive_link: link, address: address, disposition: "seller", at: new Date().toISOString() }
+            })
+          }).then(function (r) {
+            note.textContent = (r.ok || r.status === 201)
+              ? "Queued - photos will appear here within ~30 min."
+              : "Not queued (HTTP " + r.status + "). Try again.";
+          }).catch(function () { note.textContent = "Network error - try again."; });
+        });
+      });
+    }
   }).catch(function () {
     grid.innerHTML = '<div class="empty">Could not load properties.</div>';
   });
