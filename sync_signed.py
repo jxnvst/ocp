@@ -206,11 +206,19 @@ def main():
         old = open(path, encoding="utf-8").read()
     new = json.dumps(listings, indent=2)
     open(path, "w", encoding="utf-8").write(new)
+    # also bake the deals into properties.html so the page renders with no network fetch
+    phr = os.path.join(REPO, "properties.html")
+    if os.path.exists(phr):
+        ph = open(phr, encoding="utf-8").read()
+        if "/*DEALS_INLINE*/" in ph:
+            ph = re.sub(r"window\.OCP_DEALS = /\*DEALS_INLINE\*/;",
+                        "window.OCP_DEALS = " + json.dumps(listings) + ";", ph, count=1)
+            open(phr, "w", encoding="utf-8").write(ph)
     print(f"signed listings: {len(listings)}  (newest first)")
     if old == new:
         print("properties.json unchanged - nothing to publish")
         return
-    subprocess.run(["git", "-C", REPO, "add", "properties.json", "photos"], check=False)
+    subprocess.run(["git", "-C", REPO, "add", "properties.json", "properties.html", "photos"], check=False)
     env = dict(os.environ, GIT_AUTHOR_NAME="OCP Auto", GIT_AUTHOR_EMAIL="jxnvst@users.noreply.github.com",
                GIT_COMMITTER_NAME="OCP Auto", GIT_COMMITTER_EMAIL="jxnvst@users.noreply.github.com")
     subprocess.run(["git", "-C", REPO, "commit", "-q", "-m", f"auto-publish: {len(listings)} deal(s)"], env=env, check=False)

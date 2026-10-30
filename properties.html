@@ -35,7 +35,8 @@
     if (n === null || n === undefined || n === "") return null;
     return Number(n).toLocaleString("en-US");
   };
-  fetch("properties.json").then(function (r) { return r.json(); }).then(function (props) {
+  var dealsSrc = (window.OCP_DEALS && window.OCP_DEALS.length) ? Promise.resolve(window.OCP_DEALS) : fetch("properties.json").then(function (r) { return r.json(); });
+  dealsSrc.then(function (props) {
     if (!props || !props.length) {
       grid.innerHTML = '<div class="property-item w-dyn-item"><div class="small-text color-grey-400" style="padding:40px;text-align:center;width:100%;">No deals yet - mark a deal signed in the pipeline and it appears here automatically.</div></div>';
       return;
