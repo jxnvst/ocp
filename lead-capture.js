@@ -1,7 +1,7 @@
 /* OCP lead capture -> PN Landing Pages leads (page_leads), disposed buyer/seller (ver0) */
 (function () {
   var URL = "https://tooambsacmhrlgpwgwsv.supabase.co";
-  var KEY = "sb_publishable_dBJ3a4vz9xNWMvdZMp4i1A__hQU6YEp";
+  var KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvb2FtYnNhY21ocmxncHdnd3N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MTU4NjksImV4cCI6MjA5NzI5MTg2OX0.2votR41Hj8cww9fJgjjQHtdGZkFRYVTwbXYAk_6kkuo";
   var LP = "358e74d4-570f-47e8-bafb-00e604fc80b6";
   function postLead(fields) {
     var payload = {
