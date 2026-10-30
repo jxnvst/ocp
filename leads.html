@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Compass Point - Get Started</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --primary:#1a365d; --accent:#319795; --text:#2d3748; --muted:#718096; --bg:#f7fafc; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:'Montserrat',sans-serif; color:var(--text); background:var(--bg); -webkit-font-smoothing:antialiased; }
+  header { background:var(--primary); color:#fff; padding:22px 24px; }
+  .wrap { max-width:760px; margin:0 auto; padding:0 24px; }
+  .brand { font-weight:800; font-size:22px; }
+  .brand a { color:#fff; text-decoration:none; }
+  h1 { font-size:28px; font-weight:800; color:var(--primary); margin:34px 0 6px; }
+  .sub { color:var(--muted); margin:0 0 24px; font-size:15px; }
+  .tabs { display:flex; gap:10px; margin-bottom:22px; }
+  .tab { flex:1; text-align:center; padding:13px; border-radius:12px; border:1.5px solid #d3dce6; background:#fff;
+         font-weight:700; cursor:pointer; font-family:inherit; font-size:15px; color:var(--text); }
+  .tab.active { background:var(--primary); border-color:var(--primary); color:#fff; }
+  .panel { display:none; background:#fff; border:1px solid rgba(0,0,0,.07); border-radius:16px; padding:28px; }
+  .panel:not(.hidden) { display:block; }
+  label { display:block; font-size:13px; font-weight:700; margin:14px 0 5px; color:var(--text); }
+  input, textarea { width:100%; border:1px solid #d3dce6; border-radius:9px; padding:11px 13px; font-family:inherit; font-size:15px; }
+  textarea { resize:vertical; }
+  .btn { width:100%; margin-top:20px; background:var(--accent); color:#fff; border:0; border-radius:10px; padding:14px; font-family:inherit; font-size:16px; font-weight:700; cursor:pointer; }
+  .btn:hover { background:var(--primary); }
+  [data-capture-msg] { margin-top:12px; font-size:14px; color:var(--accent); font-weight:600; min-height:18px; }
+  .back { display:inline-block; margin:26px 0 40px; color:var(--muted); text-decoration:none; font-size:14px; }
+  .back:hover { color:var(--accent); }
+</style>
+</head>
+<body>
+<header><div class="wrap brand"><a href="index.html">One Compass Point</a></div></header>
+<div class="wrap">
+  <h1>Get Started</h1>
+  <p class="sub" id="sub">Tell us what you need — we'll be in touch within one business day.</p>
+
+  <div class="tabs">
+    <button class="tab active" id="tabBuyer" type="button">I'm a Buyer</button>
+    <button class="tab" id="tabSeller" type="button">I Want to Sell</button>
+  </div>
+
+  <!-- BUYER -->
+  <form class="panel" id="buyerForm" data-capture="1" data-disposition="buyer">
+    <input type="hidden" name="disposition" value="buyer">
+    <label>Name</label><input name="name" required>
+    <label>Phone</label><input name="phone" required>
+    <label>Email</label><input name="email" type="email">
+    <label>What are you looking for?</label>
+    <textarea name="message" rows="3" placeholder="Single family, multifamily, apartments, portfolio... target area and budget."></textarea>
+    <button class="btn" type="submit">Join the Buyers List</button>
+    <div data-capture-msg></div>
+  </form>
+
+  <!-- SELLER -->
+  <form class="panel" id="sellerForm" data-capture="1" data-disposition="seller" style="display:none;">
+    <input type="hidden" name="disposition" value="seller">
+    <label>Name</label><input name="name" required>
+    <label>Phone</label><input name="phone" required>
+    <label>Email</label><input name="email" type="email">
+    <label>Property address</label><input name="address">
+    <label>About your property (units, price, rent, mortgage)</label>
+    <textarea name="message" rows="3" placeholder="e.g. 6-unit on Busti Ave, vacant or rented, looking for cash / subject-to / seller financing."></textarea>
+    <button class="btn" type="submit">Sell Your Property</button>
+    <div data-capture-msg></div>
+  </form>
+
+  <a class="back" href="properties.html">&larr; View available properties</a>
+</div>
+
+<script src="lead-capture.js"></script>
+<script>
+  (function () {
+    var b = document.getElementById("buyerForm");
+    var s = document.getElementById("sellerForm");
+    var tb = document.getElementById("tabBuyer");
+    var ts = document.getElementById("tabSeller");
+    var sub = document.getElementById("sub");
+    function set(buyer) {
+      b.style.display = buyer ? "block" : "none";
+      s.style.display = buyer ? "none" : "block";
+      tb.classList.toggle("active", buyer);
+      ts.classList.toggle("active", !buyer);
+      sub.textContent = buyer ? "Join the buyers list — tell us what you're after." : "Sell your property — cash, subject-to, or seller financing.";
+    }
+    tb.addEventListener("click", function () { set(true); });
+    ts.addEventListener("click", function () { set(false); });
+    // open directly from the hero CTA links: ?buyer or ?seller
+    var q = location.search;
+    if (q.indexOf("seller") > -1) set(false);
+    else if (q.indexOf("buyer") > -1) set(true);
+  })();
+</script>
+</body>
+</html>

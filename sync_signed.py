@@ -11,7 +11,7 @@ SUPABASE_URL = "https://tooambsacmhrlgpwgwsv.supabase.co/rest/v1"
 ORION = "f2614863-5b4d-411e-a828-e9fa574c27de"
 REPO = "/home/ubuntu/onecompass-deploy"
 NINE_UNIT_PHOTOS = "photos/busti9"       # 9-unit (387 Busti Ave) gallery
-NINE_UNIT_COVER = "1793220531697.jpg"   # the 2nd photo = main photo
+NINE_UNIT_COVER = "main_9unit.jpg"      # main/hero photo for the listing
 
 def svc_key():
     for line in open(ENV):
