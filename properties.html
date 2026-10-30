@@ -3,7 +3,7 @@
     <div class="text-wrap-medium">
       <div class="basic-text color-grey-400 section-badge">Available Deals</div>
       <div class="space-small"></div>
-      <h2 class="section-heading">Acquired. Ready for a buyer.</h2>
+      <h2 class="section-heading"><span class="drop drop-1">Acquired.</span><span class="drop drop-2">Ready</span><span class="drop drop-3">For Buyers.</span></h2>
     </div>
     <div class="space-large"></div>
     <div class="w-dyn-list">
@@ -161,21 +161,27 @@
 <style>
   @media (prefers-reduced-motion: no-preference) {
     @keyframes ocpDrop { from { opacity:0; transform: translateY(-22px); } to { opacity:1; transform: none; } }
-    section#property .section-badge,
-    section#property .section-heading {
+    section#property .section-badge {
       opacity: 0;
       animation: ocpDrop .7s cubic-bezier(.22,.61,.36,1) forwards;
     }
-    section#property .section-badge  { animation-delay: .05s; }
-    section#property .section-heading{ animation-delay: .25s; }
+    section#property .section-badge { animation-delay: .05s; }
+    section#property .section-heading .drop {
+      display: block;
+      opacity: 0;
+      animation: ocpDrop .7s cubic-bezier(.22,.61,.36,1) forwards;
+    }
+    section#property .section-heading .drop-1 { animation-delay: .25s; }
+    section#property .section-heading .drop-2 { animation-delay: .5s; }
+    section#property .section-heading .drop-3 { animation-delay: .75s; }
     #deal-grid .property-item {
       opacity: 0;
       animation: ocpDrop .6s cubic-bezier(.22,.61,.36,1) forwards;
     }
-    #deal-grid .property-item:nth-child(1){ animation-delay: .5s; }
-    #deal-grid .property-item:nth-child(2){ animation-delay: .75s; }
-    #deal-grid .property-item:nth-child(3){ animation-delay: 1.0s; }
-    #deal-grid .property-item:nth-child(n+4){ animation-delay: 1.25s; }
+    #deal-grid .property-item:nth-child(1){ animation-delay: 1.05s; }
+    #deal-grid .property-item:nth-child(2){ animation-delay: 1.3s; }
+    #deal-grid .property-item:nth-child(3){ animation-delay: 1.55s; }
+    #deal-grid .property-item:nth-child(n+4){ animation-delay: 1.8s; }
   }
 </style>
 </body></html>
