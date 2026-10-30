@@ -135,6 +135,13 @@
     pill.classList.remove("on");
   }
 
+
+  // remove the Webflow runtime badge whenever it appears
+  var _badgeObserver = new MutationObserver(function () {
+    var b = document.querySelector(".w-webflow-badge");
+    if (b) b.remove();
+  });
+  _badgeObserver.observe(document.documentElement, { childList: true, subtree: true });
   // floating toggle pill (always available - no URL required)
   var pill = document.createElement("button");
   pill.className = "ocp-pill";
