@@ -30,6 +30,15 @@
   .tags button.active { background: #1a365d; color: #fff; border-color: #1a365d; }
   .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1a365d; color: #fff; padding: 10px 22px; border-radius: 999px; font-size: 14px; opacity: 0; transition: opacity .3s; }
   .toast.show { opacity: 1; }
+
+  .link-row { display: flex; gap: 10px; margin-top: 10px; }
+  .link-row input { flex: 1; }
+  .link-btn { background: #319795; color: #fff; border: 0; border-radius: 8px; padding: 9px 16px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+  .cover-hint { font-size: 12px; color: #718096; margin-top: 8px; }
+  #preview img.candidate { border: 3px solid transparent; cursor: pointer; }
+  #preview img.main-photo { border: 3px solid #1a365d; box-shadow: 0 0 0 2px #319795; }
+  #preview .thumb-wrap { position: relative; }
+  #preview .main-badge { position: absolute; bottom: 4px; left: 4px; background: #1a365d; color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
 </style>
 </head>
 <body>
@@ -37,13 +46,19 @@
   <div class="admin-head">
     <h1>Add Property</h1>
     <span class="badge-live">Updates the site instantly</span>
+    <a href="index.html?edit=1" class="badge-live" style="text-decoration:none;margin-left:8px;">Edit Site</a>
   </div>
 
   <div class="form-card">
-    <label>Photos (first photo is the card cover)</label>
+    <label>Photos - pick the main photo below</label>
     <div class="photo-drop" id="drop">Click to pick photos (or drag &amp; drop)</div>
     <input type="file" id="files" accept="image/*" multiple>
+    <div class="link-row">
+      <input type="text" id="photolink" placeholder="or paste a photo link / Google Drive link">
+      <button type="button" id="addlink" class="link-btn">Add Photo</button>
+    </div>
     <div id="preview"></div>
+    <div class="cover-hint">Click any photo to make it the main / hero photo.</div>
 
     <div class="form-row">
       <div><label>Street address</label><input type="text" id="street" placeholder="123 Main St"></div>
@@ -99,10 +114,8 @@
           var r = Math.min(1, max / Math.max(img.width, img.height));
           c.width = Math.round(img.width * r); c.height = Math.round(img.height * r);
           c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-          photos.push(c.toDataURL("image/jpeg", 0.78));
-          var el = document.createElement("img");
-          el.src = photos[photos.length - 1];
-          document.getElementById("preview").appendChild(el);
+          photos.push({ src: c.toDataURL("image/jpeg", 0.78) });
+          renderThumbs();
         };
         img.src = e.target.result;
       };
@@ -116,6 +129,67 @@
   drop.addEventListener("dragover", function (e) { e.preventDefault(); });
   drop.addEventListener("drop", function (e) { e.preventDefault(); readFiles(e.dataTransfer.files); });
   fileInput.addEventListener("change", function () { readFiles(fileInput.files); });
+
+  // convert Google Drive share links to a directly loadable image URL
+  function driveToDirect(url) {
+    var u = url.trim();
+    if (u.indexOf("drive.google.com") === -1 && u.indexOf("docs.google.com") === -1) {
+      return u; // plain image link, use as-is
+    }
+    var id = null;
+    var m = u.match(/[\/]d\/([\w-]{10,})[\/?#]?/);
+    if (m) id = m[1];
+    if (!id) {
+      var q = u.match(/[?&]id=([\w-]{10,})/);
+      if (q) id = q[1];
+    }
+    if (!id) return null;
+    return "https://drive.google.com/thumbnail?id=" + id + "&sz=w1200";
+  }
+
+  function addPhotoUrl(url, isFile) {
+    var src = isFile ? url : driveToDirect(url);
+    if (!src) { toast("Could not read that link"); return; }
+    photos.push({ src: src });
+    renderThumbs();
+  }
+
+  var coverIdx = 0;
+
+  function renderThumbs() {
+    var pv = document.getElementById("preview");
+    pv.innerHTML = "";
+    photos.forEach(function (ph, i) {
+      var w = document.createElement("div");
+      w.className = "thumb-wrap";
+      var img = document.createElement("img");
+      img.src = ph.src;
+      img.className = "candidate" + (i === coverIdx ? " main-photo" : "");
+      img.addEventListener("click", function () {
+        coverIdx = i;
+        renderThumbs();
+      });
+      w.appendChild(img);
+      if (i === coverIdx) {
+        var b = document.createElement("div");
+        b.className = "main-badge";
+        b.textContent = "MAIN PHOTO";
+        w.appendChild(b);
+      }
+      pv.appendChild(w);
+    });
+  }
+
+  document.getElementById("addlink").addEventListener("click", function () {
+    var inp = document.getElementById("photolink");
+    var v = inp.value.trim();
+    if (!v) { toast("Paste a link first"); return; }
+    addPhotoUrl(v, false);
+    inp.value = "";
+  });
+  document.getElementById("photolink").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") document.getElementById("addlink").click();
+  });
 
   function toast(msg) {
     var t = document.getElementById("toast");
@@ -134,7 +208,8 @@
       tag: tag,
       title: document.getElementById("title").value.trim(),
       desc: document.getElementById("desc").value.trim(),
-      photos: photos,
+      photos: photos.map(function (p) { return p.src; }),
+      cover: coverIdx,
       at: new Date().toISOString()
     };
     var all = JSON.parse(localStorage.getItem(KEY) || "[]");
@@ -144,6 +219,7 @@
     document.getElementById("files").value = "";
     document.getElementById("preview").innerHTML = "";
     photos = [];
+    coverIdx = 0;
     ["street","city","state","price","title","desc"].forEach(function (id) { document.getElementById(id).value = ""; });
     toast("Property added - refresh the site to see it live");
   });

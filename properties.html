@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Compass Point - Properties</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --primary:#1a365d; --accent:#319795; --text:#2d3748; --muted:#718096; --bg:#ffffff; --tint:#f7fafc; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:'Montserrat',sans-serif; color:var(--text); background:var(--bg); -webkit-font-smoothing:antialiased; }
+  header { background:var(--primary); color:#fff; padding:26px 24px; }
+  .wrap { max-width:1200px; margin:0 auto; padding:0 24px; }
+  .top { display:flex; justify-content:space-between; align-items:center; }
+  .brand { font-weight:800; font-size:22px; letter-spacing:-.02em; }
+  .brand a { color:#fff; text-decoration:none; }
+  .nav-links a { color:rgba(255,255,255,.8); text-decoration:none; font-size:14px; margin-left:22px; }
+  .nav-links a:hover { color:#fff; }
+  .sub { font-size:14px; color:rgba(255,255,255,.7); margin-top:4px; }
+  main { padding:44px 0; }
+  h1 { font-size:32px; font-weight:800; color:var(--primary); margin:0 0 6px; }
+  .desc { color:var(--muted); font-size:15px; margin:0 0 30px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:26px; }
+  .card { background:var(--bg); border:1px solid rgba(0,0,0,.07); border-radius:16px; overflow:hidden; box-shadow:0 4px 20px rgba(26,54,93,.06); display:flex; flex-direction:column; }
+  .photo { position:relative; height:230px; background:linear-gradient(135deg,#1a365d,#319795); }
+  .photo img { width:100%; height:100%; object-fit:cover; display:block; }
+  .tag { position:absolute; top:14px; left:14px; background:var(--primary); color:#fff; font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:5px 12px; border-radius:999px; }
+  .closed { position:absolute; top:14px; right:14px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; padding:5px 12px; border-radius:999px; }
+  .body { padding:20px 22px 24px; }
+  .addr { font-size:14px; color:var(--muted); margin:0 0 8px; }
+  .name { font-size:19px; font-weight:800; color:var(--primary); margin:0 0 6px; }
+  .price { font-size:18px; font-weight:700; color:var(--text); }
+  .meta { display:flex; gap:16px; margin-top:14px; font-size:13px; color:var(--muted); border-top:1px solid rgba(0,0,0,.06); padding-top:12px; }
+  .thumbs { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+  .thumbs img { width:46px; height:46px; object-fit:cover; border-radius:8px; cursor:pointer; border:2px solid transparent; }
+  .thumbs img.on { border-color:var(--accent); }
+  footer { background:var(--primary); color:rgba(255,255,255,.7); text-align:center; padding:22px; font-size:13px; }
+  .empty { text-align:center; color:var(--muted); padding:60px 0; }
+  .empty a { color:var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap top">
+    <div class="brand"><a href="/">One Compass Point</a></div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html#property">All Listings</a>
+      <a href="admin.html">Sell Your Property</a>
+    </div>
+  </div>
+  <div class="wrap sub">Investor priced properties - single family, multi, apartments &amp; portfolios. Cash, SubTo &amp; Seller Financing.</div>
+</header>
+<main class="wrap">
+  <h1>Completed &amp; Available Properties</h1>
+  <p class="desc">Deals we've signed - pulled automatically from our pipeline, newest first.</p>
+  <div class="grid" id="grid"><div class="empty" id="loading">Loading properties...</div></div>
+</main>
+<footer>One Compass Point &copy; 2026. Investor priced real estate.</footer>
+
+<script>
+(function () {
+  var grid = document.getElementById("grid");
+  var money = function (n) {
+    if (n === null || n === undefined || n === "") return null;
+    return "$" + Number(n).toLocaleString("en-US");
+  };
+  fetch("properties.json").then(function (r) { return r.json(); }).then(function (props) {
+    if (!props || !props.length) {
+      grid.innerHTML = '<div class="empty">No deals published yet. Mark a deal <b>signed</b> in the pipeline and it appears here automatically.</div>';
+      return;
+    }
+    grid.innerHTML = "";
+    props.forEach(function (p, idx) {
+      var cover = p.photos && p.photos.length && (typeof p.cover === "number" ? p.photos[p.cover] : p.photos[0]);
+      var others = p.photos ? p.photos.map(function (s, i) {
+        var on = (typeof p.cover === "number" ? p.cover : 0) === i ? " on" : "";
+        return '<img class="thumb' + on + '" src="' + s + '" alt="">';
+      }).join("") : "";
+      var card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML =
+        '<div class="photo"><div class="tag">' + (p.property_type || "Property") + '</div>' +
+        (p.closed ? '<div class="closed">SOLD ' + p.closed + "</div>" : "") +
+        (cover ? '<img src="' + cover + '" alt="" class="mainimg">' : "") + "</div>" +
+        '<div class="body">' +
+        '<p class="addr">' + (p.address ? p.address : "") + (p.city ? ", " + p.city : "") + (p.state ? ", " + p.state : "") + "</p>" +
+        '<div class="name">' + (p.title || p.address || "Property") + "</div>" +
+        (money(p.price) ? '<div class="price">' + money(p.price) + "</div>" : "") +
+        '<div class="meta">' +
+          (p.units ? "<span>" + p.units + " units</span>" : "") +
+          (p.beds ? "<span>" + p.beds + " bd</span>" : "") +
+          (p.baths ? "<span>" + p.baths + " ba</span>" : "") +
+          (p.sqft ? "<span>" + Number(p.sqft).toLocaleString() + " sqft</span>" : "") +
+          (money(p.property_tax) ? "<span>Tax " + money(p.property_tax) + "</span>" : "") +
+        "</div>" +
+        (others ? '<div class="thumbs">' + others + "</div>" : "") +
+        "</div>";
+      grid.appendChild(card);
+    });
+    // thumb click swaps the main photo
+    grid.addEventListener("click", function (e) {
+      if (e.target.classList && e.target.classList.contains("thumb")) {
+        var card = e.target.closest(".card");
+        var mainImg = card.querySelector(".mainimg");
+        if (mainImg) {
+          mainImg.src = e.target.src;
+          card.querySelectorAll(".thumb").forEach(function (t) { t.classList.remove("on"); });
+          e.target.classList.add("on");
+        }
+      }
+    });
+  }).catch(function () {
+    grid.innerHTML = '<div class="empty">Could not load properties.</div>';
+  });
+})();
+</script>
+</body>
+</html>

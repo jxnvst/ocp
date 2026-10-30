@@ -30,7 +30,8 @@
     var img = node.querySelector(".property-image-wrap img");
     if (img) {
       if (p.photos && p.photos.length) {
-        img.setAttribute("src", p.photos[0]);
+        var cover = (typeof p.cover === "number") ? p.cover : 0;
+        img.setAttribute("src", p.photos[cover] || p.photos[0]);
         img.removeAttribute("srcset");
         img.removeAttribute("sizes");
         img.style.transform = "";
