@@ -1,198 +1,158 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>One Compass Point - Properties</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root { --primary:#1a365d; --accent:#319795; --text:#2d3748; --muted:#718096; --bg:#ffffff; --tint:#f7fafc; }
-  * { box-sizing: border-box; }
-  body { margin:0; font-family:'Montserrat',sans-serif; color:var(--text); background:var(--bg); -webkit-font-smoothing:antialiased; }
-  header { background:var(--primary); color:#fff; padding:26px 24px; }
-  .wrap { max-width:1200px; margin:0 auto; padding:0 24px; }
-  .top { display:flex; justify-content:space-between; align-items:center; }
-  .brand { font-weight:800; font-size:22px; letter-spacing:-.02em; }
-  .brand a { color:#fff; text-decoration:none; }
-  .nav-links a { color:rgba(255,255,255,.8); text-decoration:none; font-size:14px; margin-left:22px; }
-  .nav-links a:hover { color:#fff; }
-  .sub { font-size:14px; color:rgba(255,255,255,.7); margin-top:4px; }
-  main { padding:44px 0; }
-  h1 { font-size:32px; font-weight:800; color:var(--primary); margin:0 0 6px; }
-  .desc { color:var(--muted); font-size:15px; margin:0 0 30px; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:26px; }
-  .card { background:var(--bg); border:1px solid rgba(0,0,0,.07); border-radius:16px; overflow:hidden; box-shadow:0 4px 20px rgba(26,54,93,.06); display:flex; flex-direction:column; }
-  .photo { position:relative; height:230px; background:linear-gradient(135deg,#1a365d,#319795); }
-  .photo img { width:100%; height:100%; object-fit:cover; display:block; }
-  .tag { position:absolute; top:14px; left:14px; background:var(--primary); color:#fff; font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:5px 12px; border-radius:999px; }
-  .closed { position:absolute; top:14px; right:14px; background:var(--accent); color:#fff; font-size:11px; font-weight:700; padding:5px 12px; border-radius:999px; }
-  .body { padding:20px 22px 24px; }
-  .addr { font-size:14px; color:var(--muted); margin:0 0 8px; }
-  .name { font-size:19px; font-weight:800; color:var(--primary); margin:0 0 6px; }
-  .price { font-size:18px; font-weight:700; color:var(--text); }
-  .meta { display:flex; gap:16px; margin-top:14px; font-size:13px; color:var(--muted); border-top:1px solid rgba(0,0,0,.06); padding-top:12px; }
-  .thumbs { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
-  .thumbs img { width:46px; height:46px; object-fit:cover; border-radius:8px; cursor:pointer; border:2px solid transparent; }
-  .thumbs img.on { border-color: var(--accent); }
+<html data-wf-domain="vistahaven.webflow.io" data-wf-page="6784794885cc7b8dbfb185ec" data-wf-site="6784794885cc7b8dbfb185e2" lang="en" class="w-mod-js w-mod-ix wf-geist-n3-active wf-geist-n4-active wf-geist-n6-active wf-montserrat-n1-active wf-montserrat-n8-active wf-montserrat-n5-active wf-montserrat-n3-active wf-montserrat-n6-active wf-montserrat-n2-active wf-montserrat-n9-active wf-montserrat-n7-active wf-montserrat-n4-active wf-montserrat-i7-active wf-montserrat-i3-active wf-montserrat-i2-active wf-montserrat-i1-active wf-montserrat-i4-active wf-montserrat-i8-active wf-montserrat-i9-active wf-montserrat-i6-active wf-montserrat-i5-active wf-active"><head><style>.wf-force-outline-none[tabindex="-1"]:focus{outline:none;}</style><meta charset="utf-8"><link href="https://cdn.prod.website-files.com" rel="preconnect" crossorigin="anonymous"><title>One Compass Point - Investor Priced Real Estate</title><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Webflow" name="generator"><link href="styles.css" rel="stylesheet" type="text/css"><style>@media (min-width:992px) {html.w-mod-js:not(.w-mod-ix) [data-w-id="e63b9384-7285-77c2-71bb-074b5e6a26d5"] {-webkit-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);}html.w-mod-js:not(.w-mod-ix) [data-w-id="8d4333f2-8287-f15a-2621-cb8c1dac8b46"] {filter: grayscale(0%);}html.w-mod-js:not(.w-mod-ix) [data-w-id="14380eab-3818-7a3c-e8cd-eacef28d0e61"] {-webkit-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);}}@media (max-width:991px) and (min-width:768px) {html.w-mod-js:not(.w-mod-ix) [data-w-id="e63b9384-7285-77c2-71bb-074b5e6a26d5"] {-webkit-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);}}@media (max-width:767px) and (min-width:480px) {html.w-mod-js:not(.w-mod-ix) [data-w-id="e63b9384-7285-77c2-71bb-074b5e6a26d5"] {-webkit-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);}}@media (max-width:479px) {html.w-mod-js:not(.w-mod-ix) [data-w-id="e63b9384-7285-77c2-71bb-074b5e6a26d5"] {-webkit-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);}}</style><link href="https://fonts.googleapis.com" rel="preconnect"><link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"><script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic%7CGeist:300,regular,600" media="all"><script type="text/javascript">WebFont.load({  google: {    families: ["Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic","Geist:300,regular,600"]  }});</script><script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script><link href="https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/678df8ff7341a72ea9e2d2d0_favicon.png" rel="shortcut icon" type="image/x-icon"><link href="https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/678df903ef7479f4b2de0fa5_webclip.png" rel="apple-touch-icon"><script src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script></head>><div data-w-id="4edc08f1-263e-f242-2d27-f591cf69ac07" data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease-in-out-quad" data-easing2="ease-in-out-quad" role="banner" class="navbar w-nav" style="opacity: 1; transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"><div class="navbar-content"><a id="w-node-_4edc08f1-263e-f242-2d27-f591cf69ac09-cf69ac07" href="/" aria-current="page" class="brand-logo w-nav-brand w--current" aria-label="home"><img src="https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/678ded5a7c52fa60584a4fee_logo-dark.svg" loading="lazy" alt="" class="full brand-logo-image"><div class="large-text logo-text">One Compass Point</div></a><nav role="navigation" id="w-node-_4edc08f1-263e-f242-2d27-f591cf69ac0d-cf69ac07" class="nav-menu w-nav-menu"><a href="/" data-w-id="6a81d041-a58d-541f-ba1b-bccd01f85a3b" aria-current="page" class="nav-link w-inline-block w--current"><div class="nav-text-wrap" style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"><div class="basic-text color-grey-400 nav-menu">Home</div><div class="basic-text color-grey-400 nav-menu opacity-100">Home</div></div></a><a href="/about" data-w-id="f3acbd3d-09a5-09f5-852e-7aee3fc0bb15" class="nav-link w-inline-block"><div class="nav-text-wrap" style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"><div class="basic-text color-grey-400 nav-menu">About</div><div class="basic-text color-grey-400 nav-menu opacity-100">About</div></div></a><a href="/properties" data-w-id="d11a56c4-6310-438a-44a5-48e692786f8a" class="nav-link w-inline-block"><div class="nav-text-wrap" style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"><div class="basic-text color-grey-400 nav-menu">Properties</div><div class="basic-text color-grey-400 nav-menu opacity-100">Properties</div></div></a><a href="/agents" data-w-id="a979c6b7-7b8b-68e3-a39a-bc5b7beec00c" class="nav-link w-inline-block"><div class="nav-text-wrap" style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"><div class="basic-text color-grey-400 nav-menu">Agents</div><div class="basic-text color-grey-400 nav-menu opacity-100">Agents</div></div></a><a href="/blogs" data-w-id="f624b90b-baaf-0763-873c-77e7c42b04a7" class="nav-link w-inline-block"><div class="nav-text-wrap" style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"><div class="basic-text color-grey-400 nav-menu">Blogs</div><div class="basic-text color-grey-400 nav-menu opacity-100">Blogs</div></div></a><a data-w-id="e66592fc-5fad-af30-857f-fe3b35793b21" href="properties.html" class="button navbar-button hide-in-tablet w-inline-block" style=""><div class="icon-size-small relative color-green w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--carbon" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" fill="currentColor"></circle></svg></div><div class="small-text">View Properties</div><div class="button-circle navbar-button"><div class="icon-size-small navbar-button hover-in w-embed" style="transform: translate3d(0%, 0%, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--carbon" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path fill="currentColor" d="M10 6v2h12.59L6 24.59L7.41 26L24 9.41V22h2V6z"></path></svg></div><div class="icon-size-small navbar-button hover-out w-embed" style="transform: translate3d(-180%, 180%, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--carbon" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path fill="currentColor" d="M10 6v2h12.59L6 24.59L7.41 26L24 9.41V22h2V6z"></path></svg></div></div></a></nav><div id="w-node-_4edc08f1-263e-f242-2d27-f591cf69ac1a-cf69ac07" class="nav-button-wrap"><a data-w-id="4edc08f1-263e-f242-2d27-f591cf69ac1b" href="properties.html" class="button navbar-button hide-in-mobile w-inline-block" style=""><div class="icon-size-small relative color-green w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--carbon" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" fill="currentColor"></circle></svg></div><div class="small-text">View Properties</div><div class="button-circle navbar-button"><div class="icon-size-small navbar-button hover-in w-embed" style="transform: translate3d(0%, 0%, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--carbon" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path fill="currentColor" d="M10 6v2h12.59L6 24.59L7.41 26L24 9.41V22h2V6z"></path></svg></div><div class="icon-size-small navbar-button hover-out w-embed" style="transform: translate3d(-180%, 180%, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--carbon" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path fill="currentColor" d="M10 6v2h12.59L6 24.59L7.41 26L24 9.41V22h2V6z"></path></svg></div></div></a><div class="menu-button w-nav-button" style="-webkit-user-select: text;" aria-label="menu" role="button" tabindex="0" aria-controls="w-nav-overlay-0" aria-haspopup="menu" aria-expanded="false"><div class="icon w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bx" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M4 11h12v2H4zm0-5h16v2H4zm0 12h7.235v-2H4z"></path></svg></div></div></div></div><div class="w-nav-overlay" data-wf-ignore="" id="w-nav-overlay-0"></div></div><body><section id="property" class="property-section">
+  <div class="container">
+    <div class="text-wrap-medium">
+      <div class="basic-text color-grey-400 section-badge">Available Deals</div>
+      <div class="space-small"></div>
+      <h2 class="section-heading">Acquired. Ready for a buyer.</h2>
+    </div>
+    <div class="space-large"></div>
+    <div class="w-dyn-list">
+      <div role="list" class="properties-list w-dyn-items" id="deal-grid"></div>
+    </div>
+    <div class="space-large"></div>
+  </div>
+</section><style>
   .carousel { position: relative; }
-  .carousel img { width:100%; height:100%; object-fit:cover; display:block; }
-  .czone { position:absolute; top:0; bottom:0; width:34%; cursor:pointer; z-index:2; opacity:0; transition:opacity .2s; display:flex; align-items:center; }
+  .carousel img { transition: opacity .15s; }
+  .czone { position:absolute; top:0; bottom:0; width:30%; cursor:pointer; z-index:3; opacity:0; transition:opacity .2s; display:flex; align-items:center; }
   .czone.left { left:0; justify-content:flex-start; }
   .czone.right { right:0; justify-content:flex-end; }
   .carousel:hover .czone { opacity:1; }
-  .czone span { background:rgba(10,20,35,.45); color:#fff; font-size:20px; font-weight:800; padding:8px 13px; border-radius:999px; margin:0 10px; user-select:none; }
-  .czone.left span { margin-left:8px; }
-  .czone.right span { margin-right:8px; }
+  .czone span { background:rgba(10,20,35,.45); color:#fff; font-size:18px; font-weight:800; padding:8px 12px; border-radius:999px; margin:0 8px; user-select:none; }
+  .thumbs-row { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+  .thumbs-row img { width:44px; height:44px; object-fit:cover; border-radius:8px; cursor:pointer; border:2px solid transparent; }
+  .thumbs-row img.on { border-color:#319795; }
   .drive-row { display:none; gap:8px; margin-top:10px; }
   .drive-row input { flex:1; border:1px solid #d3dce6; border-radius:8px; padding:8px 10px; font-family:inherit; font-size:13px; }
-  .drive-row button { background:var(--accent); color:#fff; border:0; border-radius:8px; padding:8px 14px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; }
-  .drive-note { font-size:12px; color:var(--accent); margin-top:6px; }
-  footer { background:var(--primary); color:rgba(255,255,255,.7); text-align:center; padding:22px; font-size:13px; }
-  .empty { text-align:center; color:var(--muted); padding:60px 0; }
-  .empty a { color:var(--accent); }
-</style>
-</head>
-<body>
-<header>
-  <div class="wrap top">
-    <div class="brand"><a href="/">One Compass Point</a></div>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="index.html#property">All Listings</a>
-      <a href="admin.html">Sell Your Property</a>
-    </div>
-  </div>
-  <div class="wrap sub">Deals we own, offered to buyers - single family, multi, apartments &amp; portfolios. Cash, SubTo &amp; Seller Financing.</div>
-</header>
-<main class="wrap">
-  <h1>Available Deals</h1>
-  <p class="desc">We've already acquired these - now they're offered as deals to a buyer. Cash, subject-to, or seller financing. Newest first.</p>
-  <div class="grid" id="grid"><div class="empty" id="loading">Loading properties...</div></div>
-</main>
-<footer>One Compass Point &copy; 2026. Investor priced real estate.</footer>
-
+  .drive-row button { background:#319795; color:#fff; border:0; border-radius:8px; padding:8px 14px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+  .drive-note { font-size:12px; color:#319795; margin-top:6px; }
+</style><div id="deal-tmpl" style="display:none"><div data-w-id="1a1d999b-72d7-16d7-bf2f-ecd0c656b97a" style="opacity: 0;" role="listitem" class="property-item w-dyn-item"><a href="/properties/billionaire-mansion" class="property w-inline-block"><div class="property-image-wrap"><img src="https://cdn.prod.website-files.com/67875eb8de2529a75075fafd/6787673905e3b068ab915da2_property-5.jpg" loading="lazy" data-w-id="14380eab-3818-7a3c-e8cd-eacef28d0e61" alt="" sizes="100vw" srcset="https://cdn.prod.website-files.com/67875eb8de2529a75075fafd/6787673905e3b068ab915da2_property-5-p-500.jpg 500w, https://cdn.prod.website-files.com/67875eb8de2529a75075fafd/6787673905e3b068ab915da2_property-5.jpg 800w" class="full cover" style="transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg); transform-style: preserve-3d;"><div class="property-category">For Sell</div></div><div class="property-info-wrap"><div class="property-location"><div class="icon-size-normal color-grey-400 w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c-4.2 0-8 3.22-8 8.2c0 3.18 2.45 6.92 7.34 11.23c.38.33.95.33 1.33 0C17.55 17.12 20 13.38 20 10.2C20 5.22 16.2 2 12 2m0 10c-1.1 0-2-.9-2-2s.9-2 2-2s2 .9 2 2s-.9 2-2 2"></path></svg></div><div class="small-text color-grey-400 nomral linehigh-small">River Oaks, Houston, Texas</div></div><div class="flex-h space-between"><div class="property-name"><div class="basic-text color-grey-400 bold">Billionaire Mansion</div></div><div class="property-price"><div class="basic-text color-grey-400 bold">$</div><div class="basic-text color-grey-400 bold">500,000</div></div></div><div class="flex-h"><div class="property-detail"><div class="icon-size-normal color-grey-300 opacity-70 w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--ic" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M21 10.78V8c0-1.65-1.35-3-3-3h-4c-.77 0-1.47.3-2 .78c-.53-.48-1.23-.78-2-.78H6C4.35 5 3 6.35 3 8v2.78c-.61.55-1 1.34-1 2.22v5c0 .55.45 1 1 1s1-.45 1-1v-1h16v1c0 .55.45 1 1 1s1-.45 1-1v-5c0-.88-.39-1.67-1-2.22M14 7h4c.55 0 1 .45 1 1v2h-6V8c0-.55.45-1 1-1M5 8c0-.55.45-1 1-1h4c.55 0 1 .45 1 1v2H5zm-1 7v-2c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v2z"></path></svg></div><div class="small-text color-grey-400 linehigh-small">5</div><div class="small-text color-grey-400 linehigh-small">Beds</div></div><div class="property-detail w-condition-invisible"><div class="icon-size-normal-xs color-grey-300 opacity-70 w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--bx" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="currentColor" d="M21 10H7V7c0-1.103.897-2 2-2s2 .897 2 2h2c0-2.206-1.794-4-4-4S5 4.794 5 7v3H3a1 1 0 0 0-1 1v2c0 2.606 1.674 4.823 4 5.65V22h2v-3h8v3h2v-3.35c2.326-.827 4-3.044 4-5.65v-2a1 1 0 0 0-1-1m-1 3c0 2.206-1.794 4-4 4H8c-2.206 0-4-1.794-4-4v-1h16z"></path></svg></div><div class="small-text color-grey-400 linehigh-small w-dyn-bind-empty"></div><div class="small-text color-grey-400 linehigh-small">Baths</div></div><div class="property-detail last"><div class="icon-size-normal-xs color-grey-300 opacity-70 w-embed"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--iconoir" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.4 22H8.6a.6.6 0 0 1-.6-.6V2.6a.6.6 0 0 1 .6-.6h6.8a.6.6 0 0 1 .6.6v18.8a.6.6 0 0 1-.6.6m.6-5h-3m3-10h-3m0 5h10m0 0l-2 2m2-2l-2-2M1 12l2-2m-2 2l2 2m-2-2h7"></path></svg></div><div class="small-text color-grey-400 linehigh-small">3,800</div><div class="small-text color-grey-400 linehigh-small">sq.ft</div></div></div></div></a><</div>
 <script>
 (function () {
-  var grid = document.getElementById("grid");
+  var grid = document.getElementById("deal-grid");
+  var tmpl = document.getElementById("deal-tmpl").innerHTML;
   var money = function (n) {
     if (n === null || n === undefined || n === "") return null;
-    return "$" + Number(n).toLocaleString("en-US");
+    return Number(n).toLocaleString("en-US");
   };
   fetch("properties.json").then(function (r) { return r.json(); }).then(function (props) {
     if (!props || !props.length) {
-      grid.innerHTML = '<div class="empty">No deals yet. Mark a deal <b>signed</b> in the pipeline and it appears here automatically.</div>';
+      grid.innerHTML = '<div class="property-item w-dyn-item"><div class="small-text color-grey-400" style="padding:40px;text-align:center;width:100%;">No deals yet - mark a deal signed in the pipeline and it appears here automatically.</div></div>';
       return;
     }
-    grid.innerHTML = "";
-    props.forEach(function (p, idx) {
-      var cover = p.photos && p.photos.length && (typeof p.cover === "number" ? p.photos[p.cover] : p.photos[0]);
-      var others = p.photos ? p.photos.map(function (s, i) {
-        var on = (typeof p.cover === "number" ? p.cover : 0) === i ? " on" : "";
-        return '<img class="thumb' + on + '" src="' + s + '" alt="">';
-      }).join("") : "";
-      var card = document.createElement("div");
-      card.className = "card";
+    props.forEach(function (p, pi) {
+      var el = document.createElement("div");
+      el.innerHTML = tmpl;
+      var card = el.firstElementChild;
       card._photos = p.photos || [];
       card._phidx = (typeof p.cover === "number" ? p.cover : 0);
-      card.innerHTML =
-        '<div class="photo"><div class="carousel">' +
-        (cover ? '<img src="' + cover + '" alt="" class="mainimg">' : "") +
-        '<div class="czone left"><span>&#8249;</span></div>' +
-        '<div class="czone right"><span>&#8250;</span></div>' +
-        "</div>" +
-        '<div class="tag">' + (p.property_type || "Property") + '</div>' +
-        (p.closed ? '<div class="closed">AVAILABLE - acquired ' + p.closed + "</div>" : "") +
-        "</div>" +
-        '<div class="body">' +
-        '<p class="addr">' + (p.address ? p.address : "") + (p.city ? ", " + p.city : "") + (p.state ? ", " + p.state : "") + "</p>" +
-        '<div class="name">' + (p.title || p.address || "Property") + "</div>" +
-        (money(p.price) ? '<div class="price">' + money(p.price) + "</div>" : "") +
-        '<div class="meta">' +
-          (p.units ? "<span>" + p.units + " units</span>" : "") +
-          (p.beds ? "<span>" + p.beds + " bd</span>" : "") +
-          (p.baths ? "<span>" + p.baths + " ba</span>" : "") +
-          (p.sqft ? "<span>" + Number(p.sqft).toLocaleString() + " sqft</span>" : "") +
-          (money(p.property_tax) ? "<span>Tax " + money(p.property_tax) + "</span>" : "") +
-        "</div>" +
-        (others ? '<div class="thumbs">' + others + "</div>" : "") +
-        "</div>";
-      grid.appendChild(card);
-    });
-    // thumb click swaps the main photo; carousel zones cycle left/right
-    grid.addEventListener("click", function (e) {
-      var card = e.target.closest ? e.target.closest(".card") : null;
-      if (!card) return;
-      var mainImg = card.querySelector(".mainimg");
-      var zone = e.target.closest ? e.target.closest(".czone") : null;
-      if (zone) {
-        var ph = card._photos;
-        if (mainImg && ph && ph.length > 1) {
-          var dir = zone.classList.contains("right") ? 1 : -1;
-          card._phidx = (card._phidx + dir + ph.length) % ph.length;
-          mainImg.src = ph[card._phidx] ? ph[card._phidx] : mainImg.src;
-          card.querySelectorAll(".thumb").forEach(function (t, ti) {
-            t.classList.toggle("on", ti === card._phidx);
-          });
-        }
-        return;
+
+      var img = card.querySelector(".property-image-wrap img");
+      var cover = p.photos && p.photos.length ? p.photos[card._phidx] : null;
+      if (img) {
+        if (cover) { img.setAttribute("src", cover); img.removeAttribute("srcset"); img.removeAttribute("sizes"); }
+        // carousel zones over the image
+        var wrap = img.parentElement;
+        wrap.classList.add("carousel");
+        var zl = document.createElement("div"); zl.className = "czone left"; zl.innerHTML = "<span>&#8249;</span>";
+        var zr = document.createElement("div"); zr.className = "czone right"; zr.innerHTML = "<span>&#8250;</span>";
+        wrap.appendChild(zl); wrap.appendChild(zr);
       }
-      if (e.target.classList && e.target.classList.contains("thumb")) {
-        var imgs = card.querySelectorAll(".thumb");
-        imgs.forEach(function (t, ti) {
-          if (t === e.target) {
-            if (mainImg) mainImg.src = e.target.src;
+      var cat = card.querySelector(".property-category");
+      if (cat) cat.textContent = "For Sell";
+      var loc = card.querySelector(".property-location .small-text, .property-location .basic-text");
+      if (loc) {
+        var cs = [p.city, p.state].filter(Boolean).join(", ");
+        loc.textContent = [p.address, cs].filter(Boolean).join(", ");
+      }
+      var name = card.querySelector(".property-name .basic-text");
+      if (name) name.textContent = p.title || p.address || "Property";
+      var amt = money(p.price);
+      if (amt !== null) {
+        var priceNodes = card.querySelectorAll(".property-price .basic-text");
+        if (priceNodes.length >= 2) priceNodes[1].textContent = amt;
+      } else {
+        var priceBlock = card.querySelector(".property-price");
+        if (priceBlock) priceBlock.style.display = "none";
+      }
+      // detail rows: [units|beds, Baths, sq.ft] - keep template icons, set values/labels, hide empties
+      var details = card.querySelectorAll(".property-detail");
+      var vals = [];
+      if (p.units) vals.push([p.units, p.units === 1 ? "Unit" : "Units"]);
+      else if (p.beds) vals.push([p.beds, p.beds === 1 ? "Bed" : "Beds"]);
+      if (p.baths) vals.push([p.baths, "Baths"]);
+      if (p.sqft) vals.push([Number(p.sqft).toLocaleString(), "sq.ft"]);
+      details.forEach(function (d, di) {
+        var texts = d.querySelectorAll(".small-text");
+        if (vals[di]) {
+          if (texts[0]) texts[0].textContent = String(vals[di][0]);
+          if (texts[1]) texts[1].textContent = vals[di][1];
+        } else {
+          d.style.display = "none";
+        }
+      });
+
+      // thumbnails + click-to-cycle
+      if (p.photos && p.photos.length > 1) {
+        var info = card.querySelector(".property-info-wrap");
+        var th = document.createElement("div");
+        th.className = "thumbs-row";
+        p.photos.forEach(function (src, ti) {
+          var tg = document.createElement("img");
+          tg.src = src;
+          if (ti === card._phidx) tg.className = "on";
+          tg.addEventListener("click", function () {
             card._phidx = ti;
-            t.classList.add("on");
-          } else {
-            t.classList.remove("on");
+            if (img) img.setAttribute("src", src);
+            th.querySelectorAll("img").forEach(function (x, xi) { x.classList.toggle("on", xi === ti); });
+          });
+          th.appendChild(tg);
+        });
+        if (info) info.appendChild(th);
+        card.addEventListener("click", function (e) {
+          if (!e.target.closest) return;
+          var zone = e.target.closest(".czone");
+          if (zone && img) {
+            e.preventDefault(); e.stopPropagation();
+            var ph = card._photos;
+            if (ph.length < 2) return;
+            var dir = zone.classList.contains("right") ? 1 : -1;
+            card._phidx = (card._phidx + dir + ph.length) % ph.length;
+            img.setAttribute("src", ph[card._phidx]);
+            var tr = card.querySelector(".thumbs-row");
+            if (tr) tr.querySelectorAll("img").forEach(function (x, xi) { x.classList.toggle("on", xi === card._phidx); });
           }
         });
       }
-    });
 
-    // Google Drive photos link queue (visible in edit mode: properties.html?edit=1)
-    if (/[?&]edit(?:=1)?($|&)/.test(location.search)) {
-      var PU = "https://tooambsacmhrlgpwgwsv.supabase.co/rest/v1/page_leads";
-      var PK = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvb2FtYnNhY21ocmxncHdnd3N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MTU4NjksImV4cCI6MjA5NzI5MTg2OX0.2votR41Hj8cww9fJgjjQHtdGZkFRYVTwbXYAk_6kkuo";
-      var PD = "358e74d4-570f-47e8-bafb-00e604fc80b6";
-      document.querySelectorAll(".card").forEach(function (card) {
-        var row = document.createElement("div");
-        row.className = "drive-row";
-        row.style.display = "flex";
-        row.innerHTML =
-          '<input placeholder="Paste Google Drive photos link" class="dl">' +
-          '<button type="button">Add Photos</button>' +
-          '<div class="drive-note"></div>';
-        card.appendChild(row);
-        var inp = row.querySelector(".dl");
-        var note = row.querySelector(".drive-note");
+      // google drive link queue (edit mode)
+      if (/[?&]edit(?:=1)?($|&)/.test(location.search)) {
+        var row = document.createElement("div"); row.className = "drive-row"; row.style.display = "flex";
+        row.innerHTML = '<input placeholder="Paste Google Drive photos link"><button type="button">Add Photos</button><div class="drive-note"></div>';
+        if (info) info.appendChild(row);
+        var inp = row.querySelector("input"); var note = row.querySelector(".drive-note");
         row.querySelector("button").addEventListener("click", function () {
           var link = inp.value.trim();
           if (!link) { note.textContent = "Paste a Google Drive link first."; return; }
-          var address = (card.querySelector(".addr") || {}).textContent || "";
+          var address = (loc ? loc.textContent : "").split(",")[0].trim() || "";
           note.textContent = "Queuing...";
-          fetch(PU, {
+          fetch("https://tooambsacmhrlgpwgwsv.supabase.co/rest/v1/page_leads", {
             method: "POST",
-            headers: { "apikey": PK, "Authorization": "Bearer " + PK, "Content-Type": "application/json", "Prefer": "return=minimal" },
+            headers: { "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvb2FtYnNhY21ocmxncHdnd3N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MTU4NjksImV4cCI6MjA5NzI5MTg2OX0.2votR41Hj8cww9fJgjjQHtdGZkFRYVTwbXYAk_6kkuo", "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvb2FtYnNhY21ocmxncHdnd3N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MTU4NjksImV4cCI6MjA5NzI5MTg2OX0.2votR41Hj8cww9fJgjjQHtdGZkFRYVTwbXYAk_6kkuo", "Content-Type": "application/json", "Prefer": "return=minimal" },
             body: JSON.stringify({
-              landing_page_id: PD,
-              name: "OCP drive link",
-              message: link,
-              source: "onecompasspoint.com",
+              landing_page_id: "358e74d4-570f-47e8-bafb-00e604fc80b6",
+              name: "OCP drive link", message: link, source: "onecompasspoint.com",
               metadata: { kind: "ocp_drive_link", drive_link: link, address: address, disposition: "seller", at: new Date().toISOString() }
             })
           }).then(function (r) {
-            note.textContent = (r.ok || r.status === 201)
-              ? "Queued - photos will appear here within ~30 min."
-              : "Not queued (HTTP " + r.status + "). Try again.";
+            note.textContent = (r.ok || r.status === 201) ? "Queued - photos appear here within ~30 min." : "Not queued (HTTP " + r.status + ").";
           }).catch(function () { note.textContent = "Network error - try again."; });
         });
-      });
-    }
+      }
+      grid.appendChild(card);
+    });
   }).catch(function () {
-    grid.innerHTML = '<div class="empty">Could not load properties.</div>';
+    grid.innerHTML = '<div class="property-item w-dyn-item"><div class="small-text color-grey-400" style="padding:40px;text-align:center;width:100%;">Could not load deals.</div></div>';
   });
 })();
-</script>
-</body>
-</html>
+</script><section id="footer" class="footer"><section id="contact" class="contact-section"><div class="container full"><div class="text-wrap-medium margin-auto text-align-center"><div data-w-id="bee645df-a229-32aa-8faa-5a13c6b78b6d" class="basic-text color-grey-400 section-badge" style="opacity: 0;">Get in Touch</div><div class="space-small"></div><h2 data-w-id="bee645df-a229-32aa-8faa-5a13c6b78b70" class="section-heading" style="opacity: 0;">Let’s Make Your Property Journey Effortless</h2><div class="space-large"></div><div data-w-id="bee645df-a229-32aa-8faa-5a13c6b78b73" class="basic-text color-grey-400" style="opacity: 0;">Have questions or ready to take the next step? Whether you’re looking to buy, rent, or invest, our team is here to guide you every step of the way. Let’s turn your property goals into reality.</div></div><div class="space-large"></div><div data-w-id="bee645df-a229-32aa-8faa-5a13c6b78b76" class="form-wrap w-form" style="opacity: 0;"><form id="email-form" name="email-form" data-name="Email Form" method="get" class="form" data-wf-page-id="6784794885cc7b8dbfb185ec" data-wf-element-id="bee645df-a229-32aa-8faa-5a13c6b78b77" data-turnstile-sitekey="0x4AAAAAAAQTptj2So4dx43e" aria-label="Email Form"><div class="input-wrap flex-h gap-small"><input class="text-field small-text color-grey-400 w-input" maxlength="256" name="name" data-name="Name" placeholder="First Name" type="text" id="First-Name"><input class="text-field small-text color-grey-400 w-input" maxlength="256" name="name" data-name="Name" placeholder="Last Name" type="text" id="Last-Name"></div><div class="input-wrap flex-h gap-small"><input class="text-field small-text color-grey-400 w-input" maxlength="256" name="Email-2" data-name="Email 2" placeholder="Email" type="email" id="Email-2"><input class="text-field small-text color-grey-400 w-input" maxlength="256" name="Phone-3" data-name="Phone 3" placeholder="Phone" type="tel" id="Phone-3"></div><textarea placeholder="What Can We Help You ?" maxlength="5000" id="field-2" name="field-2" data-name="Field 2" class="text-field small-text input-area color-grey-400 w-input"></textarea><input type="submit" data-wait="Please wait..." class="submit-button basic-text w-button" value="Book a Call" disabled=""><div><div><input type="hidden" name="cf-turnstile-response" id="cf-chl-widget-064qm_response" value=""></div></div></form><div class="w-form-done" tabindex="-1" role="region" aria-label="Email Form success"><div>Thank you! Your submission has been received!</div></div><div class="w-form-fail" tabindex="-1" role="region" aria-label="Email Form failure"><div>Oops! Something went wrong while submitting the form.</div></div></div></div><div class="contact-bg-wrap"><div class="gradient-white-top contact-bg"></div><img src="https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/6789e453099e81e883a098fd_minimalist-architecture-space-(7).jpg" loading="lazy" sizes="(max-width: 1920px) 100vw, 1920px" srcset="https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/6789e453099e81e883a098fd_minimalist-architecture-space-(7)-p-500.jpg 500w, https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/6789e453099e81e883a098fd_minimalist-architecture-space-(7)-p-800.jpg 800w, https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/6789e453099e81e883a098fd_minimalist-architecture-space-(7)-p-1080.jpg 1080w, https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/6789e453099e81e883a098fd_minimalist-architecture-space-(7)-p-1600.jpg 1600w, https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/6789e453099e81e883a098fd_minimalist-architecture-space-(7).jpg 1920w" alt="" class="full gradient-white"></div></section><section class="footer-section"><div class="container full"><div class="footer-wrap-top"><div class="footer-wrap-left"><a href="/" aria-current="page" class="brand-logo footer w-nav-brand w--current"><img src="https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/678ded5ac0ea1300cdb42c07_logo-white.svg" loading="lazy" alt="" class="full brand-logo-image"><div class="large-text logo-text color-white">One Compass Point</div></a><a href="/admin.html" class="footer-link admin-link" style="color:rgba(255,255,255,0.75);text-decoration:none;font-size:14px;margin-left:16px;">Add Property</a><div class="text-wrap flex-v"><a href="tel:+1-800-555-1234" class="basic-text footer">+1-800-555-1234</a><a href="mailto:info@vistahaven.com" class="basic-text footer">info@vistahaven.com</a><div class="basic-text color-grey-200">123 Serenity Boulevard, Greenwood Heights, NY 11222, United States</div></div><div class="social-wrap"><a href="https://www.facebook.com/" target="_blank" class="social-icon-wrap w-inline-block"><img src="https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/678df298b67bc99d940bc8f4_BxBxlFacebook.svg" loading="lazy" alt="" class="full footer"></a><a href="https://www.linkedin.com/" target="_blank" class="social-icon-wrap w-inline-block"><img src="https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/678df298cdd8b492837832b4_BxBxlLinkedin.svg" loading="lazy" alt="" class="full footer"></a><a href="https://www.youtube.com/" target="_blank" class="social-icon-wrap w-inline-block"><img src="https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/678df298658e7ee47651fa75_CarbonLogoYoutube.svg" loading="lazy" alt="" class="full footer"></a></div></div><div class="footer-wrap-right"><div class="text-wrap flex-v gap-medium"><div class="basic-text bold">Navigation</div><div class="space-small-xs"></div><a href="/" aria-current="page" class="basic-text footer w--current">Home</a><a href="/about" class="basic-text footer">About</a><a href="/properties" class="basic-text footer">Properties</a><a href="/blogs" class="basic-text footer">Blogs</a><a href="/agents" class="basic-text footer">Agents</a><a href="/contact" class="basic-text footer">Contact</a></div><div class="text-wrap flex-v gap-medium"><div class="basic-text bold">Admin</div><div class="space-small-xs"></div><a href="/template-info/license" class="basic-text footer">Licensing</a><a href="/template-info/style-guide" class="basic-text footer">Style Guide</a><a href="/template-info/change-log" class="basic-text footer">Change Log</a></div></div></div><div class="footer-wrap-bottom"><div class="basic-text footer-copyright">One Compass Point © 2026. Investor priced real estate.</div></div></div></section></section><script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=6784794885cc7b8dbfb185e2" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script><script src="https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/js/webflow.schunk.4a394eb5af8156f2.js" type="text/javascript"></script><script src="https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/js/webflow.schunk.04cc0dc194dc0b7f.js" type="text/javascript"></script><script src="https://cdn.prod.website-files.com/6784794885cc7b8dbfb185e2/js/webflow.d05cc30d.b66ec8e2aeb9e682.js" type="text/javascript"></script><div></div><script src="site-editor.js"></script></body></html>
