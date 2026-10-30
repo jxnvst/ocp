@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OCP - Add Property</title>
+<link href="styles.css" rel="stylesheet" type="text/css">
+<style>
+  body { background: var(--bg-light, #f7fafc); padding: 40px 20px; }
+  .admin-wrap { max-width: 720px; margin: 0 auto; }
+  .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+  .admin-head h1 { font-family: 'Montserrat', sans-serif; font-size: 26px; color: var(--primary-color, #1a365d); margin: 0; }
+  .badge-live { font-size: 12px; color: #fff; background: #319795; padding: 4px 12px; border-radius: 999px; font-weight: 600; }
+  .form-card { background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 14px; padding: 28px; }
+  .form-card label { display: block; font-size: 13px; font-weight: 700; color: #2d3748; margin: 16px 0 6px; }
+  .form-card input[type=text], .form-card input[type=number], .form-card textarea {
+    width: 100%; box-sizing: border-box; border: 1px solid rgba(0,0,0,0.12); border-radius: 8px;
+    padding: 10px 12px; font-family: inherit; font-size: 15px; }
+  .form-card textarea { resize: vertical; }
+  .form-row { display: flex; gap: 14px; }
+  .form-row > div { flex: 1; }
+  .photo-drop { border: 2px dashed #cbd5e0; border-radius: 10px; padding: 22px; text-align: center; color: #718096; cursor: pointer; }
+  .photo-drop input { display: none; }
+  #preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  #preview img { width: 90px; height: 90px; object-fit: cover; border-radius: 8px; }
+  .btn { background: #1a365d; color: #fff; border: 0; border-radius: 8px; padding: 12px 22px; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 20px; }
+  .btn:hover { background: #319795; }
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tags button { border: 1px solid #cbd5e0; background: #fff; border-radius: 999px; padding: 5px 14px; font-family: inherit; font-size: 13px; cursor: pointer; }
+  .tags button.active { background: #1a365d; color: #fff; border-color: #1a365d; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1a365d; color: #fff; padding: 10px 22px; border-radius: 999px; font-size: 14px; opacity: 0; transition: opacity .3s; }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="admin-wrap">
+  <div class="admin-head">
+    <h1>Add Property</h1>
+    <span class="badge-live">Updates the site instantly</span>
+  </div>
+
+  <div class="form-card">
+    <label>Photos (first photo is the card cover)</label>
+    <div class="photo-drop" id="drop">Click to pick photos (or drag &amp; drop)</div>
+    <input type="file" id="files" accept="image/*" multiple>
+    <div id="preview"></div>
+
+    <div class="form-row">
+      <div><label>Street address</label><input type="text" id="street" placeholder="123 Main St"></div>
+      <div><label>City</label><input type="text" id="city" placeholder="Buffalo"></div>
+    </div>
+    <div class="form-row">
+      <div><label>State</label><input type="text" id="state" placeholder="NY"></div>
+      <div><label>Price / asking</label><input type="text" id="price" placeholder="$89,000"></div>
+    </div>
+
+    <label>Tag (shows on the card)</label>
+    <div class="tags">
+      <button type="button" class="active" data-tag="For Sell">For Sell</button>
+      <button type="button" data-tag="For Rent">For Rent</button>
+      <button type="button" data-tag="For Investment">For Investment</button>
+    </div>
+
+    <label>Title (short)</label>
+    <input type="text" id="title" placeholder="Investor Priced 2-Family">
+
+    <label>Description</label>
+    <textarea id="desc" rows="3" placeholder="Units, rents, taxes, condition... anything you want on the card."></textarea>
+
+    <button class="btn" id="save">Add Property to the Site</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  var KEY = "ocp_properties_v1";
+  var tag = "For Sell";
+  var photos = [];
+
+  document.querySelectorAll(".tags button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll(".tags button").forEach(function (x) { x.classList.remove("active"); });
+      b.classList.add("active");
+      tag = b.dataset.tag;
+    });
+  });
+
+  function readFiles(list) {
+    Array.prototype.forEach.call(list, function (f) {
+      if (!f.type || f.type.indexOf("image") === -1) return;
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var img = new Image();
+        img.onload = function () {
+          // shrink to 800px JPEG so the page stays fast
+          var c = document.createElement("canvas");
+          var max = 800;
+          var r = Math.min(1, max / Math.max(img.width, img.height));
+          c.width = Math.round(img.width * r); c.height = Math.round(img.height * r);
+          c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+          photos.push(c.toDataURL("image/jpeg", 0.78));
+          var el = document.createElement("img");
+          el.src = photos[photos.length - 1];
+          document.getElementById("preview").appendChild(el);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(f);
+    });
+  }
+
+  var drop = document.getElementById("drop");
+  var fileInput = document.getElementById("files");
+  drop.addEventListener("click", function () { fileInput.click(); });
+  drop.addEventListener("dragover", function (e) { e.preventDefault(); });
+  drop.addEventListener("drop", function (e) { e.preventDefault(); readFiles(e.dataTransfer.files); });
+  fileInput.addEventListener("change", function () { readFiles(fileInput.files); });
+
+  function toast(msg) {
+    var t = document.getElementById("toast");
+    t.textContent = msg; t.classList.add("show");
+    setTimeout(function () { t.classList.remove("show"); }, 2200);
+  }
+
+  document.getElementById("save").addEventListener("click", function () {
+    var street = document.getElementById("street").value.trim();
+    if (!street) { toast("Address is required"); return; }
+    var p = {
+      street: street,
+      city: document.getElementById("city").value.trim(),
+      state: document.getElementById("state").value.trim(),
+      price: document.getElementById("price").value.trim(),
+      tag: tag,
+      title: document.getElementById("title").value.trim(),
+      desc: document.getElementById("desc").value.trim(),
+      photos: photos,
+      at: new Date().toISOString()
+    };
+    var all = JSON.parse(localStorage.getItem(KEY) || "[]");
+    all.push(p); // append to the end -> new card goes to the right
+    localStorage.setItem(KEY, JSON.stringify(all));
+    // clear form
+    document.getElementById("files").value = "";
+    document.getElementById("preview").innerHTML = "";
+    photos = [];
+    ["street","city","state","price","title","desc"].forEach(function (id) { document.getElementById(id).value = ""; });
+    toast("Property added - refresh the site to see it live");
+  });
+})();
+</script>
+</body>
+</html>
