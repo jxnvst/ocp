@@ -40,6 +40,11 @@
     st.id = "ocp-edit-css";
     st.textContent =
       ".ocp-veil { position: fixed; inset: 0; background: rgba(10,20,35,0.5); z-index: 99990; pointer-events: none; }" +
+      ".ocp-editbox { position: fixed; right: 24px; bottom: 24px; z-index: 99999; background:#fff; border:1px solid rgba(0,0,0,.12); border-radius:12px; box-shadow:0 12px 30px rgba(0,0,0,.2); padding:14px; width:300px; font:13px Montserrat,sans-serif; }" +
+      ".ocp-editbox input { width:100%; box-sizing:border-box; border:1px solid #d3dce6; border-radius:8px; padding:9px 11px; font-family:inherit; font-size:13px; margin-bottom:8px; }" +
+      ".ocp-editbox .row { display:flex; gap:8px; }" +
+      ".ocp-editbox .row button { flex:1; background:#1a365d; color:#fff; border:0; border-radius:8px; padding:8px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; }" +
+      ".ocp-editbox .row button[data-act=cancel] { background:#e2e8f0; color:#475569; }" +
       ".ocp-editable { position: relative !important; z-index: 99995 !important; cursor: text; outline: 1.5px dashed rgba(49,151,149,0.6); outline-offset: 3px; border-radius: 4px; }" +
       ".ocp-photo { position: relative !important; z-index: 99995 !important; cursor: pointer; outline: 1.5px dashed rgba(49,151,149,0.6); outline-offset: 3px; border-radius: 6px; }" +
       ".ocp-editable:focus, .ocp-photo:hover { outline-color: #319795; background: rgba(49,151,149,0.08); }" +
@@ -67,6 +72,9 @@
         var lab = document.createElement("span");
         lab.className = "ocp-label"; lab.textContent = g.label;
         el.appendChild(lab);
+        el.addEventListener("click", function (e) {
+          e.preventDefault(); e.stopPropagation();
+        });
         el.addEventListener("input", function () {
           edits[g.sel] = edits[g.sel] || [];
           edits[g.sel][i] = { t: el.textContent };
@@ -75,45 +83,55 @@
       });
     });
 
-    // photos: click = replace with your own image
-    var fileInput = document.createElement("input");
-    fileInput.type = "file"; fileInput.accept = "image/*"; fileInput.style.display = "none";
-    document.body.appendChild(fileInput);
-    var currentImg = null;
+    // photos: click a photo -> a small text field pops up to paste a link / drive link
+    var eb = null;
     PHOTO_SELS.forEach(function (sel) {
       matches(sel).forEach(function (img, i) {
         img.classList.add("ocp-photo");
         var lab = document.createElement("span");
-        lab.className = "ocp-label"; lab.textContent = "Click to change photo";
+        lab.className = "ocp-label"; lab.textContent = "Click photo to change";
         if (img.parentElement) {
           img.parentElement.style.position = img.parentElement.style.position || "relative";
           img.parentElement.appendChild(lab);
         }
         img.addEventListener("click", function (e) {
+          e.preventDefault();
           e.stopPropagation();
-          currentImg = { img: img, sel: sel, i: i };
-          fileInput.value = "";
-          fileInput.click();
+          if (eb && eb.parentElement) eb.remove();
+          eb = document.createElement("div");
+          eb.className = "ocp-editbox";
+          eb.innerHTML =
+            '<div style="font:700 11px/1.2 Montserrat,sans-serif;color:#1a365d;margin-bottom:6px;">Change this photo</div>' +
+            '<input type="text" placeholder="Paste a photo link or Google Drive link">' +
+            '<div class="row"><button type="button" data-act="use">Use</button><button type="button" data-act="cancel">Cancel</button></div>';
+          document.body.appendChild(eb);
+          var inp = eb.querySelector("input");
+          inp.value = img.getAttribute("src") || "";
+          inp.focus();
+          eb.querySelector('[data-act="cancel"]').addEventListener("click", function () { eb.remove(); eb = null; });
+          eb.querySelector('[data-act="use"]').addEventListener("click", function () {
+            var link = inp.value.trim();
+            if (!link) { eb.remove(); eb = null; return; }
+            var src = link;
+            var m = link.match(/drive\.google\.com\/file\/d\/([\w-]{10,})/);
+            if (m) src = "https://drive.google.com/thumbnail?id=" + m[1] + "&sz=w1200";
+            img.setAttribute("src", src);
+            edits[sel] = edits[sel] || [];
+            edits[sel][i] = { s: src };
+            localStorage.setItem(EDITS_KEY, JSON.stringify(edits));
+            eb.remove(); eb = null;
+          });
         });
       });
     });
 
-    fileInput.addEventListener("change", function () {
-      if (!currentImg || !fileInput.files || !fileInput.files[0]) return;
-      var f = fileInput.files[0];
-      var reader = new FileReader();
-      reader.onload = function (ev) {
-        var src = ev.target.result;
-        currentImg.img.setAttribute("src", src);
-        edits[currentImg.sel] = edits[currentImg.sel] || [];
-        edits[currentImg.sel][currentImg.i] = { s: src };
-        localStorage.setItem(EDITS_KEY, JSON.stringify(edits));
-      };
-      reader.readAsDataURL(f);
-    });
-
-    pill.textContent = "Done";
-    pill.classList.add("on");
+    // Done button appears only inside edit mode (never on the public site)
+    var ebDone = document.createElement("button");
+    ebDone.id = "ocp-exit-btn";
+    ebDone.className = "ocp-pill on";
+    ebDone.textContent = "Done";
+    ebDone.addEventListener("click", exit);
+    document.body.appendChild(ebDone);
   }
 
   function exit() {
@@ -131,8 +149,8 @@
       el.classList.remove("ocp-photo");
       if (el.parentElement) { var l = el.parentElement.querySelector(".ocp-label"); if (l) l.remove(); }
     });
-    pill.textContent = "Edit Site";
-    pill.classList.remove("on");
+    var eb = document.getElementById("ocp-exit-btn");
+    if (eb) eb.remove();
   }
 
 
@@ -142,15 +160,9 @@
     if (b) b.remove();
   });
   _badgeObserver.observe(document.documentElement, { childList: true, subtree: true });
-  // floating toggle pill (always available - no URL required)
-  var pill = document.createElement("button");
-  pill.className = "ocp-pill";
-  pill.textContent = "Edit Site";
-  pill.addEventListener("click", function () { active ? exit() : enter(); });
-  document.body.appendChild(pill);
 
   document.addEventListener("DOMContentLoaded", function () {
     applyEdits();
-    if (/[?&]edit(?:=1)?($|&)/.test(location.search)) enter();
+    if (/[?&]ocpe(?:=1)?($|&)/.test(location.search)) enter();
   });
 })();

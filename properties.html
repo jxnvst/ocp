@@ -110,7 +110,7 @@
       }
 
       // google drive link queue (edit mode)
-      if (/[?&]edit(?:=1)?($|&)/.test(location.search)) {
+      if (/[?&]ocpe(?:=1)?($|&)/.test(location.search)) {
         var row = document.createElement("div"); row.className = "drive-row"; row.style.display = "flex";
         row.innerHTML = '<input placeholder="Paste Google Drive photos link"><button type="button">Add Photos</button><div class="drive-note"></div>';
         if (info) info.appendChild(row);
