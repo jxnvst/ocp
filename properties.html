@@ -20,9 +20,7 @@
   .czone.right { right:0; justify-content:flex-end; }
   .carousel:hover .czone { opacity:1; }
   .czone span { background:rgba(10,20,35,.45); color:#fff; font-size:18px; font-weight:800; padding:8px 12px; border-radius:999px; margin:0 8px; user-select:none; }
-  .thumbs-row { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
-  .thumbs-row img { width:44px; height:44px; object-fit:cover; border-radius:8px; cursor:pointer; border:2px solid transparent; }
-  .thumbs-row img.on { border-color:#319795; }
+  
   .drive-row { display:none; gap:8px; margin-top:10px; }
   .drive-row input { flex:1; border:1px solid #d3dce6; border-radius:8px; padding:8px 10px; font-family:inherit; font-size:13px; }
   .drive-row button { background:#319795; color:#fff; border:0; border-radius:8px; padding:8px 14px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; }
@@ -94,23 +92,9 @@
         }
       });
 
-      // thumbnails + click-to-cycle
+      // carousel: click left/right of the main photo to cycle (no thumbnail strip - clean site)
       if (p.photos && p.photos.length > 1) {
         var info = card.querySelector(".property-info-wrap");
-        var th = document.createElement("div");
-        th.className = "thumbs-row";
-        p.photos.forEach(function (src, ti) {
-          var tg = document.createElement("img");
-          tg.src = src;
-          if (ti === card._phidx) tg.className = "on";
-          tg.addEventListener("click", function () {
-            card._phidx = ti;
-            if (img) img.setAttribute("src", src);
-            th.querySelectorAll("img").forEach(function (x, xi) { x.classList.toggle("on", xi === ti); });
-          });
-          th.appendChild(tg);
-        });
-        if (info) info.appendChild(th);
         card.addEventListener("click", function (e) {
           if (!e.target.closest) return;
           var zone = e.target.closest(".czone");
@@ -121,8 +105,6 @@
             var dir = zone.classList.contains("right") ? 1 : -1;
             card._phidx = (card._phidx + dir + ph.length) % ph.length;
             img.setAttribute("src", ph[card._phidx]);
-            var tr = card.querySelector(".thumbs-row");
-            if (tr) tr.querySelectorAll("img").forEach(function (x, xi) { x.classList.toggle("on", xi === card._phidx); });
           }
         });
       }
