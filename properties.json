@@ -119,7 +119,9 @@
     "arv": 590000.0,
     "property_tax": null,
     "closed": "2026-08-20",
-    "photos": [],
+    "photos": [
+      "/photos/sat/d92ef5ea186248.jpg"
+    ],
     "cover": 0
   }
 ]
