@@ -211,8 +211,8 @@ def main():
     if os.path.exists(phr):
         ph = open(phr, encoding="utf-8").read()
         if "/*DEALS_INLINE*/" in ph:
-            ph = re.sub(r"window\.OCP_DEALS = /\*DEALS_INLINE\*/;",
-                        "window.OCP_DEALS = " + json.dumps(listings) + ";", ph, count=1)
+            ph = ph.replace("window.OCP_DEALS = /*DEALS_INLINE*/;",
+                            "window.OCP_DEALS = " + json.dumps(listings, ensure_ascii=False) + ";", 1)
             open(phr, "w", encoding="utf-8").write(ph)
     print(f"signed listings: {len(listings)}  (newest first)")
     if old == new:
