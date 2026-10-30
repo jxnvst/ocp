@@ -49,7 +49,7 @@
       <a href="admin.html">Sell Your Property</a>
     </div>
   </div>
-  <div class="wrap sub">Investor priced properties - single family, multi, apartments &amp; portfolios. Cash, SubTo &amp; Seller Financing.</div>
+  <div class="wrap sub">Deals we own, offered to buyers - single family, multi, apartments &amp; portfolios. Cash, SubTo &amp; Seller Financing.</div>
 </header>
 <main class="wrap">
   <h1>Completed &amp; Available Properties</h1>
@@ -67,7 +67,7 @@
   };
   fetch("properties.json").then(function (r) { return r.json(); }).then(function (props) {
     if (!props || !props.length) {
-      grid.innerHTML = '<div class="empty">No deals published yet. Mark a deal <b>signed</b> in the pipeline and it appears here automatically.</div>';
+      grid.innerHTML = '<div class="empty">No deals yet. Mark a deal <b>signed</b> in the pipeline and it appears here automatically.</div>';
       return;
     }
     grid.innerHTML = "";
@@ -81,7 +81,7 @@
       card.className = "card";
       card.innerHTML =
         '<div class="photo"><div class="tag">' + (p.property_type || "Property") + '</div>' +
-        (p.closed ? '<div class="closed">SOLD ' + p.closed + "</div>" : "") +
+        (p.closed ? '<div class="closed">AVAILABLE - acquired ' + p.closed + "</div>" : "") +
         (cover ? '<img src="' + cover + '" alt="" class="mainimg">' : "") + "</div>" +
         '<div class="body">' +
         '<p class="addr">' + (p.address ? p.address : "") + (p.city ? ", " + p.city : "") + (p.state ? ", " + p.state : "") + "</p>" +
