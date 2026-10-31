@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>387 Busti Ave - Offering Sheet | One Compass Point</title>
+<style>
+  /* ===== AGENCY BRAND CONFIG (edit per agency) =====
+     primary / accent = brand colors; agency name, tagline, contact. */
+  :root {
+    --primary: #1a365d;   /* agency brand color 1 */
+    --accent: #319795;    /* agency brand color 2 */
+    --ink: #2d3748; --mut: #718096; --line: #e2e8f0; --bg: #f7fafc;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Plus Jakarta Sans','Segoe UI',Arial,sans-serif; color: var(--ink); background: var(--bg); padding: 24px; }
+  .sheet { max-width: 920px; margin: 0 auto; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 34px rgba(15,40,60,.12); border: 1px solid #e6edf3; }
+  .head { background: linear-gradient(120deg,var(--primary) 0%, #0f2a4a 70%); color:#fff; padding: 26px 32px; }
+  .head .brand { font-size: 20px; font-weight: 800; letter-spacing:-.3px; } .head .brand b { color: var(--accent); }
+  .head .tag { font-size: 11px; opacity:.72; margin-top:2px; letter-spacing:.6px; }
+  .head h1 { font-size: 25px; font-weight: 800; margin-top:16px; line-height:1.15; }
+  .head .sub { font-size: 13.5px; opacity:.9; margin-top:5px; }
+  /* letterboxed carousel stage at the top, content pushes below */
+  .stage { position: relative; width:100%; aspect-ratio:16/9; background:#0b1c30; }
+  .stage img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
+  .czone { position:absolute; top:0; bottom:0; width:34%; cursor:pointer; display:flex; align-items:center; z-index:4; }
+  .czone.left { left:0; justify-content:flex-start; } .czone.right { right:0; justify-content:flex-end; }
+  .czone span { background:rgba(10,20,35,.5); color:#fff; font-size:30px; font-weight:800; padding:6px 14px; border-radius:999px; margin:0 12px; user-select:none; }
+  .stage .counter { position:absolute; left:12px; bottom:10px; color:#fff; font-size:12px; background:rgba(0,0,0,.45); padding:4px 10px; border-radius:999px; z-index:5; }
+  .stage .drivelink { position:absolute; right:12px; top:12px; color:#fff; font-size:12px; font-weight:700; background:rgba(10,20,35,.55); padding:7px 12px; border-radius:999px; text-decoration:none; z-index:6; }
+  .stage .drivelink:hover { background: var(--accent); }
+  .body { padding: 26px 32px 30px; }
+  .pill { display:inline-block; background: color-mix(in srgb, var(--accent) 12%, #fff); color:var(--accent); font-size:12px; font-weight:800; padding:4px 12px; border-radius:999px; margin-bottom:14px; letter-spacing:.3px; }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .stat { background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:14px 16px; }
+  .stat .k { font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:var(--mut); font-weight:700; }
+  .stat .v { font-size:22px; font-weight:800; color:var(--primary); margin-top:4px; } .stat .v.green { color:#2c7a7b; }
+  h2 { font-size:15px; font-weight:800; color:var(--primary); margin:24px 0 12px; border-bottom:2px solid color-mix(in srgb,var(--accent) 20%, #fff); padding-bottom:6px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { text-align:left; background:var(--bg); color:var(--mut); font-weight:700; text-transform:uppercase; font-size:11px; letter-spacing:.5px; padding:8px 10px; }
+  td { padding:9px 10px; border-bottom:1px solid var(--line); }
+  .total td { border-top:2px solid var(--primary); font-weight:800; color:var(--primary); border-bottom:0; }
+  .r { text-align:right; } .note { font-size:12px; color:var(--mut); margin-top:8px; line-height:1.5; }
+  .cta { margin-top:26px; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:16px 18px; }
+  .cta b { color:var(--primary); }
+  .cta .btn, .cta .btn2 { display:inline-block; font-weight:800; font-size:14px; padding:11px 22px; border-radius:9px; margin-top:10px; text-decoration:none; }
+  .cta .btn { background:var(--accent); color:#fff; margin-right:8px; } .cta .btn2 { background:var(--primary); color:#fff; }
+  .warn { font-size:11px; color:var(--mut); margin-top:10px; font-style:italic; }
+  .foot { font-size:11px; color:#a0aec0; margin-top:18px; text-align:center; }
+  @media (max-width:640px){ .grid{grid-template-columns:1fr;} .body{padding:20px 18px;} }
+  @media print { body{background:#fff;padding:0;} .sheet{box-shadow:none;border:0;} .stage{aspect-ratio:16/9;} .no-print{display:none;} }
+</style><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head><body>
+<div class="sheet">
+  <div class="head">
+    <div class="brand">One Compass <b>Point</b></div>
+    <div class="tag">INVESTOR PRICED REAL ESTATE</div>
+    <h1>387 Busti Ave &mdash; 9-Unit Multifamily</h1>
+    <div class="sub">Buffalo, NY 14201 &nbsp;&middot;&nbsp; West Side &nbsp;&middot;&nbsp; Off-Market Offering</div>
+  </div>
+
+  <!-- Letterboxed carousel of the property photos -->
+  <div class="stage" id="stage">
+    <img id="ph" src="" alt="387 Busti Ave">
+    <div class="czone left" id="prev" title="Previous"><span>&#8249;</span></div>
+    <div class="czone right" id="next" title="Next"><span>&#8250;</span></div>
+    <div class="counter" id="counter"></div>
+    <a class="drivelink" id="drivelink" href="#" target="_blank" rel="noopener">Photos in Google Drive &#8599;</a>
+  </div>
+
+
+  <!-- Location & nearby map view (ver3) -->
+  <div class="body" style="padding-bottom:8px">
+    <span class="pill">LOCATION</span>
+    <div id="nearmap" style="height:400px;border-radius:12px;border:1px solid var(--line);background:#e6edf3;"></div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:12px;font-size:12px;font-weight:700;">
+      <span style="color:#c0392b">&#9632; Property</span>
+      <span style="color:#2c7a7b">&#9632; Schools</span>
+      <span style="color:#c2410c">&#9632; Grocery</span>
+      <span style="color:#334155">&#9632; Transit</span>
+      <span style="color:#b45309">&#9632; Hospital</span>
+      <span style="color:#15803d">&#9632; Park</span>
+      <span style="color:#6d28d9">&#9632; Airport</span>
+    </div>
+    <div class="note" id="nearlist"></div>
+  </div>
+    <div class="body" style="padding-top:6px">
+    <span class="pill">INVESTMENT SUMMARY</span>
+    <div class="grid">
+      <div class="stat"><div class="k">Gross Income</div><div class="v">$10,292<span style="font-size:12px;font-weight:600">/mo</span></div></div>
+      <div class="stat"><div class="k">Net Operating Income</div><div class="v green">$81,029<span style="font-size:12px;font-weight:600">/yr</span></div></div>
+      <div class="stat"><div class="k">NOI / Month</div><div class="v green">$6,752</div></div>
+    </div>
+
+    <h2>Income &amp; Occupancy</h2>
+    <table>
+      <tr><th>Rent Source</th><th>Units</th><th>Rate / Unit</th><th class="r">Monthly</th></tr>
+      <tr><td>Section 8 (BMHA 14201 payment standard)</td><td>4</td><td>$1,099 &ndash; $1,297</td><td class="r">$4,792</td></tr>
+      <tr><td>Market renters</td><td>5</td><td>$1,000 &ndash; $1,250</td><td class="r">$5,500</td></tr>
+      <tr class="total"><td>Gross Potential Rent</td><td>9</td><td class="r">&mdash;</td><td class="r">$10,292</td></tr>
+      <tr><td colspan="3">Vacancy &amp; collection loss (4% blended &mdash; Section 8 pays on time)</td><td class="r">($410)</td></tr>
+      <tr class="total"><td>Effective Gross Income</td><td colspan="2" class="r">&mdash;</td><td class="r">$9,880</td></tr>
+    </table>
+
+    <h2>Operating Expenses (annualized)</h2>
+    <table>
+      <tr><th>Expense</th><th class="r">Annual</th></tr>
+      <tr><td>Property taxes (Erie County)</td><td class="r">$6,000</td></tr>
+      <tr><td>Insurance</td><td class="r">$7,200</td></tr>
+      <tr><td>Water / sewer (tenant electric)</td><td class="r">$4,050</td></tr>
+      <tr><td>Maintenance &amp; repairs</td><td class="r">$8,100</td></tr>
+      <tr><td>Turnover, legal, marketing</td><td class="r">$2,700</td></tr>
+      <tr><td>Property management (8% of EGI)</td><td class="r">$9,485</td></tr>
+      <tr class="total"><td>Total Operating Expenses</td><td class="r">$37,535</td></tr>
+    </table>
+
+    <h2>Net Operating Income &amp; Cap Rate</h2>
+    <table>
+      <tr><th>Metric</th><th class="r">Value</th></tr>
+      <tr class="total"><td>NOI</td><td class="r">$81,029 / yr ($6,752 / mo)</td></tr>
+      <tr><td colspan="2" style="border:0;padding:3px"></td></tr>
+      <tr class="total"><td>Offering Price</td><td class="r">$565,000</td></tr>
+      <tr class="total"><td>Cap Rate (NOI / Price)</td><td class="r">14.3%</td></tr>
+      <tr><td>Price per unit (9 units)</td><td class="r">$62,778</td></tr>
+      <tr><td>Gross Rent Multiplier (price / gross)</td><td class="r">4.6x</td></tr>
+    </table>
+    <p class="note">Working West Side small-multifamily trades near an <b>8% cap</b> (comparable: 698 Columbus Pkwy, 5-unit, listed 8.5%). Buying here at a <b>14.3% cap</b> puts the price at roughly <b>59% of market value</b> &mdash; the same NOI supports ~$953,000 at an 8.5% market cap. Built-in equity and robust cash flow without forcing rent.</p>
+
+    <div class="cta">
+      <b>Entry terms</b>: cash, subject-to, or seller financing &mdash; structured to keep your capital working. Current pricing and full rent roll available on request.
+      <br><a class="btn" href="mailto:jaison@onecompasspoint.com">Request Pricing &amp; Rent Roll</a>
+      <a class="btn2 no-print" href="javascript:window.print()">Download / Print Sheet</a>
+    </div>
+    <p class="warn">This is an offering summary for evaluation only, not an offer or a guarantee of results. Income and cap figures are projections from current market rents and modeled operating expenses; actuals depend on final inspection, tax review, and lease conditions.</p>
+    <div class="foot">One Compass Point &middot; Investor Priced Real Estate &middot; onecompasspoint.com</div>
+  </div>
+</div>
+
+<script>
+  /* ===== AGENCY/DATA CONFIG ===== */
+  var CONFIG = {
+    drive: "https://drive.google.com/drive/folders/1etphvbbg80PzkJN_K6z2JZEriyGlMqi7",
+    photos: ["/photos/busti9/1793220528643.jpg", "/photos/busti9/1793220531697.jpg", "/photos/busti9/IMG_7021.jpeg", "/photos/busti9/IMG_7022.jpeg", "/photos/busti9/IMG_7023.jpeg", "/photos/busti9/IMG_7024.jpeg", "/photos/busti9/IMG_7025.jpeg", "/photos/busti9/IMG_7026.jpeg", "/photos/busti9/IMG_7027.jpeg", "/photos/busti9/IMG_7028.jpeg", "/photos/busti9/IMG_7029.jpeg", "/photos/busti9/IMG_7030.jpeg", "/photos/busti9/IMG_7031.jpeg", "/photos/busti9/IMG_7032.jpeg", "/photos/busti9/IMG_7034.jpeg", "/photos/busti9/IMG_7035.jpeg", "/photos/busti9/IMG_7036.jpeg", "/photos/busti9/IMG_7037.jpeg", "/photos/busti9/IMG_7038.jpeg", "/photos/busti9/IMG_7039.jpeg", "/photos/busti9/IMG_7040.jpeg", "/photos/busti9/IMG_7041.jpeg", "/photos/busti9/IMG_7042.jpeg", "/photos/busti9/IMG_7043.jpeg", "/photos/busti9/IMG_7044.jpeg", "/photos/busti9/IMG_7045.jpeg", "/photos/busti9/IMG_7046.jpeg", "/photos/busti9/IMG_7047.jpeg", "/photos/busti9/IMG_7048.jpeg", "/photos/busti9/IMG_7049.jpeg", "/photos/busti9/IMG_7050.jpeg", "/photos/busti9/IMG_7051.jpeg", "/photos/busti9/IMG_7052.jpeg", "/photos/busti9/IMG_7053.jpeg", "/photos/busti9/IMG_7054.jpeg", "/photos/busti9/IMG_7055.jpeg", "/photos/busti9/IMG_7056.jpeg", "/photos/busti9/IMG_7057.jpeg", "/photos/busti9/IMG_7058.jpeg", "/photos/busti9/IMG_7059.jpeg", "/photos/busti9/IMG_7060.jpeg", "/photos/busti9/IMG_7061.jpeg", "/photos/busti9/IMG_7062.jpeg", "/photos/busti9/IMG_7063.jpeg", "/photos/busti9/IMG_7064.jpeg", "/photos/busti9/IMG_7067.jpeg", "/photos/busti9/IMG_7068.jpeg", "/photos/busti9/IMG_7069.jpeg", "/photos/busti9/IMG_7070.jpeg", "/photos/busti9/IMG_7071.jpeg", "/photos/busti9/IMG_7072.jpeg", "/photos/busti9/IMG_7073.jpeg", "/photos/busti9/IMG_7073_(1).jpeg", "/photos/busti9/IMG_7074.jpeg", "/photos/busti9/IMG_7075.jpeg", "/photos/busti9/IMG_7076.jpeg", "/photos/busti9/IMG_7077.jpeg", "/photos/busti9/IMG_7080.jpeg", "/photos/busti9/IMG_7081.jpeg", "/photos/busti9/IMG_7082.jpeg", "/photos/busti9/IMG_7083.jpeg", "/photos/busti9/IMG_7084.jpeg", "/photos/busti9/IMG_7085.jpeg", "/photos/busti9/IMG_7086.jpeg", "/photos/busti9/IMG_7087.jpeg", "/photos/busti9/IMG_7088.jpeg", "/photos/busti9/IMG_7089.jpeg", "/photos/busti9/IMG_7091.jpeg", "/photos/busti9/IMG_7092.jpeg", "/photos/busti9/IMG_7093.jpeg", "/photos/busti9/IMG_7094.jpeg", "/photos/busti9/IMG_7095.jpeg", "/photos/busti9/IMG_7096.jpeg", "/photos/busti9/IMG_7097.jpeg", "/photos/busti9/IMG_7098.jpeg", "/photos/busti9/IMG_7099.jpeg", "/photos/busti9/IMG_7100.jpeg", "/photos/busti9/IMG_7101.jpeg", "/photos/busti9/IMG_7102.jpeg", "/photos/busti9/IMG_7103.jpeg", "/photos/busti9/IMG_7104.jpeg", "/photos/busti9/IMG_7105.jpeg", "/photos/busti9/Screenshot_2026-10-28_at_3.04.37 PM.png", "/photos/busti9/main_9unit.jpg"]
+  };
+  (function () {
+    var P = CONFIG.photos || []; var i = 0;
+    var img = document.getElementById("ph"), counter = document.getElementById("counter");
+    var drive = document.getElementById("drivelink"); drive.href = CONFIG.drive;
+    function show(n) { i = (n + P.length) % P.length; img.src = P[i]; counter.textContent = (i + 1) + " / " + P.length; }
+    document.getElementById("prev").addEventListener("click", function (e) { e.preventDefault(); show(i - 1); });
+    document.getElementById("next").addEventListener("click", function (e) { e.preventDefault(); show(i + 1); });
+    show(8); /* open on the cover-ish photo */
+    setInterval(function () { show(i + 1); }, 4000); /* autoplay carousel */
+  })();
+</script>
+<script>
+  (function () {
+    var HOME = [42.90264, -78.89503];
+    var SR = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+    var map = L.map("nearmap").setView(HOME, 14);
+    L.tileLayer(SR, { maxZoom: 19, attribution: "&copy; OpenStreetMap" }).addTo(map);
+    var icon = function (c) { return L.divIcon({ className: "", html: "<div style='width:14px;height:14px;border-radius:50%;border:2px solid #fff;background:" + c + "'></div>" }); };
+    var POI = [
+      ["Property - 387 Busti Ave", HOME, "#c0392b", 1],
+      ["Neighborhood Schools (BPS, walking distance)", [42.9036, -78.8902], "#2c7a7b"],
+      ["Tops Friendly Markets - 425 Niagara St", [42.9074, -78.8955], "#c2410c"],
+      ["West Side Market - 255 Carolina St", [42.9050, -78.8918], "#c2410c"],
+      ["NFTA Metro Rail - Main St (free above-ground)", [42.9080, -78.8590], "#334155"],
+      ["NFTA bus - Niagara St corridor", [42.9050, -78.8930], "#334155"],
+      ["Amtrak Exchange St Station", [42.9078, -78.8760], "#334155"],
+      ["Buffalo General / Oishei Children's Hospital", [42.9012, -78.8736], "#b45309"],
+      ["Front Park (Niagara riverfront)", [42.9135, -78.9042], "#15803d"],
+      ["Buffalo Niagara International Airport (BUF)", [42.9394, -78.7341], "#6d28d9"]
+    ];
+    POI.forEach(function (p, i) {
+      L.marker(p[1], { icon: icon(p[2]) }).addTo(map).bindPopup("<b>" + p[0] + "</b>");
+    });
+    L.circle(HOME, { radius: 1200, color: "#319795", fillColor: "#319795", fillOpacity: 0.10 }).addTo(map);
+    var R = 6371, rad = Math.PI / 180;
+    function km(a, b) { var d = (b[0] - a[0]) * rad, e = (b[1] - a[1]) * rad, h = Math.sin(d / 2) * Math.sin(d / 2) + Math.cos(a[0] * rad) * Math.cos(b[0] * rad) * Math.sin(e / 2) * Math.sin(e / 2); return 2 * R * Math.asin(Math.sqrt(h)); }
+    var rows = POI.slice(1).map(function (p) {
+      var d = km(HOME, p[1]); var mi = (d * 0.621).toFixed(1);
+      var q = HOME[0] + "," + HOME[1];
+      var g = "https://www.google.com/maps/dir/" + q + "/" + p[1][0] + "," + p[1][1];
+      return "<a href='" + g + "' target='_blank' style='color:var(--primary)'>" + p[0] + "</a> &mdash; " + (d < 1.5 ? (Math.round(d * 10) / 10 * 1000).toFixed(0) + " m" : d.toFixed(1) + " km / " + mi + " mi") + " <span style='color:var(--mut)'>approx</span>";
+    });
+    document.getElementById("nearlist").innerHTML = rows.join("<br>");
+  })();
+</script>
+</body></html>
