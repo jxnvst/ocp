@@ -103,8 +103,9 @@
     ],
     "cover": 83,
     "offering": {
-      "cap": "8.1% @ $1.0M",
-      "pdf": "deals/387-busti-offering-ver2.html",
+      "cap": "14.3% @ $565K",
+      "pdf": "deals/387-busti-offering-ver3.html",
+      "price": 565000,
       "noi_yr": 81029,
       "gross_mo": 10292
     }

@@ -99,6 +99,7 @@
           var off = document.createElement("div");
           off.style.cssText = "margin-top:12px;border-top:1px solid #edf2f7;padding-top:12px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;";
           var frag = "";
+          if (p.offering.price) frag += '<div><div class="small-text color-grey-400" style="font-size:11px">Price</div><div class="basic-text bold">$' + money(p.offering.price) + '</div></div>';
           if (p.offering.noi_yr) frag += '<div><div class="small-text color-grey-400" style="font-size:11px">NOI / yr</div><div class="basic-text bold">$' + money(p.offering.noi_yr) + '</div></div>';
           if (p.offering.gross_mo) frag += '<div><div class="small-text color-grey-400" style="font-size:11px">Gross / mo</div><div class="basic-text bold">$' + money(p.offering.gross_mo) + '</div></div>';
           if (p.offering.cap) frag += '<div><div class="small-text color-grey-400" style="font-size:11px">Cap</div><div class="basic-text bold">' + p.offering.cap + '</div></div>';
