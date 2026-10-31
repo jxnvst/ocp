@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>387 Busti Ave - Offering Sheet | One Compass Point</title>
+<meta name="description" content="387 Busti Ave, Buffalo NY 14201: nine-unit multifamily offered off-market by One Compass Point.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;800;900&family=Jost:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<!--
+  One Compass Point offering sheet, ver6 ("11 Keynote in Onyx · live terms").
+  Everything a buyer sees is computed from CONFIG at the top of the last <script>.
+  - Creative terms: CONFIG.terms.creative = null hides creative everywhere (today's state for Busti).
+    Set it to { type: 'Seller financing' | 'Subject-to', down, rate, years } and the ROI headline,
+    buy-path cards, "terms are worth" price, entry terms and LOI options all recalculate.
+    Creative takes the headline only if it beats bank by 5+ points while using 60% or less of the bank's cash.
+  - Rent roll / T-12: leave CONFIG.rentRoll = [] and CONFIG.t12 = null and both sections (and their grid row) disappear.
+  - LOI: the form keeps ver5's ids (form#loi, #docs, #doclist, #loiBtn, #loiMsg) so the ver5 Supabase handler drops in.
+    Delete the block marked LOI-FALLBACK once that handler is pasted in.
+-->
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#16181C;color:#E9E6DE;font-family:Jost,'Helvetica Neue',Arial,sans-serif;font-size:15px;line-height:1.55}
+a{color:#D8B256}a:hover{color:#F5ECDC}
+.ko-bg{position:fixed;inset:0;background-position:center top;background-size:cover;background-repeat:no-repeat;opacity:.3;pointer-events:none;filter:grayscale(.35);z-index:0}
+.ko-wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:36px max(16px,env(safe-area-inset-right,0px)) 56px max(16px,env(safe-area-inset-left,0px))}
+.ko-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;grid-template-areas:"hero hero hero roi" "hero hero hero cash" "hero hero hero cap" "inc inc exp exp" "cmp cmp exp exp" "worth comps comps comps" "map map photos photos" "cta loi loi loi"}
+.ko-grid.has-data{grid-template-areas:"hero hero hero roi" "hero hero hero cash" "hero hero hero cap" "inc inc exp exp" "cmp cmp exp exp" "data data data data" "worth comps comps comps" "map map photos photos" "cta loi loi loi"}
+.t{position:relative;background:linear-gradient(180deg,rgba(37,39,45,.86),rgba(26,28,33,.86));-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid #34373E;border-radius:28px;padding:24px;min-width:0;box-shadow:0 24px 60px -30px rgba(0,0,0,.8)}
+.t::before{content:"";position:absolute;inset:0;border-radius:28px;pointer-events:none;background:radial-gradient(600px 160px at 12% -20%,rgba(216,178,86,.10),transparent 70%)}
+.lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#9095A0;font-weight:500}
+.pf{font-family:'Playfair Display',Georgia,serif;font-variant-numeric:lining-nums tabular-nums}
+.au{background:linear-gradient(100deg,#8A6D1F 0%,#D8B256 28%,#F5ECDC 50%,#D8B256 72%,#8A6D1F 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:ko-sheen 7s linear infinite}
+@keyframes ko-sheen{0%{background-position:100% 0}100%{background-position:-120% 0}}
+@media (prefers-reduced-motion:reduce){.au{animation:none;background-position:50% 0}}
+.h2{font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:700;color:#D8B256;margin:0 0 14px;text-wrap:balance}
+.tb{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums;color:#DCDAD2}
+.tb th{text-align:left;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#8F939B;font-weight:500;padding:0 0 8px;border-bottom:1px solid #33353C}
+.tb td{padding:9px 0;border-bottom:1px solid #26282E;vertical-align:top}
+.tb .r{text-align:right;white-space:nowrap;padding-left:12px}
+.tb tr.sub td{font-weight:600;color:#F4F1E8;border-bottom:1px solid #33353C}
+.tb tr.tot td{font-weight:600;color:#F4F1E8;border-top:1px solid #8A6D1F;border-bottom:0;padding-top:11px}
+.tb tr.res td{color:#D8B256}
+.tb tr.last td{border-bottom:0}
+.scroll{overflow-x:auto}
+.muted{color:#9BA0A8}
+.note{margin:12px 0 0;font-size:13px;color:#9BA0A8}
+.chip{display:inline-flex;align-items:center;gap:6px;background:rgba(22,24,28,.78);color:#E9E6DE;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;padding:7px 12px;border-radius:999px;border:1px solid rgba(216,178,86,.35)}
+.chip.gold{background:linear-gradient(100deg,#8A6D1F,#D8B256);color:#14161A;border-color:transparent;font-weight:600}
+.bar{height:10px;border-radius:999px;background:#24262B;position:relative;overflow:hidden}
+.bar .fill{position:absolute;inset:0 auto 0 0;border-radius:999px;background:linear-gradient(90deg,#8A6D1F,#D8B256,#F5ECDC)}
+.bar .fill.grey{background:#4A4D55}
+.bar .tick{position:absolute;top:-3px;bottom:-3px;width:2px;background:#F4F1E8}
+.pill{display:inline-block;margin-top:14px;padding:5px 12px;border-radius:999px;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.pill.std{background:linear-gradient(100deg,#8A6D1F,#D8B256);color:#14161A;font-weight:600}
+.pill.floor{border:1px solid #8A6D1F;color:#D8B256}
+.pill.under{border:1px solid #6F747D;color:#B9BCC3}
+.hero{grid-area:hero;min-height:600px;padding:0;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;background-color:#2A2C31;background-position:center;background-size:cover}
+.hero .frame{position:absolute;inset:14px;border:1px solid rgba(216,178,86,.5);border-radius:18px;pointer-events:none}
+.hero .foot{padding:34px;background:linear-gradient(180deg,rgba(22,24,28,0) 0%,rgba(22,24,28,.9) 60%)}
+.card{border:1px solid #34373E;border-radius:20px;padding:16px}
+.card.lead{border-color:#D8B256;background:rgba(216,178,86,.07)}
+.card .roi{font-size:36px;font-weight:800;margin:6px 0;color:#C9CCD2}
+.card.lead .roi{font-weight:900}
+.ph{border-radius:18px;overflow:hidden;position:relative;background:#1F2125;border:1px solid #34373E;min-height:150px}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}
+.ph span{position:absolute;left:10px;bottom:10px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;background:rgba(22,24,28,.78);padding:4px 8px;border-radius:999px;color:#E9E6DE}
+#map{height:300px;border-radius:18px;border:1px solid #2C2E34;background:#121417}
+#map .leaflet-tile-pane{filter:grayscale(1) invert(.92) brightness(.9) contrast(.85)}
+.leaflet-container{font-family:Jost,Arial,sans-serif}
+.poi{display:flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#D8B256;color:#16181C;font:600 11px Jost,Arial,sans-serif;box-shadow:0 0 0 2px #16181C}
+.home{width:18px;height:18px;background:#F5ECDC;transform:rotate(45deg);box-shadow:0 0 0 2px #16181C}
+.fld{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fld label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#9095A0}
+.fld input,.fld select,.fld textarea{font:inherit;font-size:15px;padding:12px 14px;border-radius:14px;border:1px solid #3A3D45;background:#1B1D22;color:#F4F1E8;min-height:44px;width:100%}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 24px;border-radius:999px;font:600 13px Jost,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:0;cursor:pointer;background:linear-gradient(100deg,#8A6D1F,#D8B256 55%,#E8CF8A);color:#14161A}
+.btn.ghost{background:transparent;border:1px solid #8A6D1F;color:#D8B256}
+.btn:focus-visible,a:focus-visible,.fld input:focus-visible,.fld select:focus-visible,.fld textarea:focus-visible{outline:2px solid #D8B256;outline-offset:2px}
+.btn:disabled{opacity:.6;cursor:wait}
+.rate-sm{display:none;font-size:12px;color:#8F939B}
+.dw{display:none}.dw.on{display:flex;flex-wrap:wrap;gap:16px;grid-area:data}
+.dp{display:none;flex:1 1 420px;min-width:0}.dp.on{display:block}
+@media (max-width:900px){
+  .ko-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"hero" "roi" "cash" "cap" "worth" "cmp" "inc" "exp" "comps" "map" "photos" "cta" "loi"}
+  .ko-grid.has-data{grid-template-areas:"hero" "roi" "cash" "cap" "worth" "cmp" "inc" "exp" "data" "comps" "map" "photos" "cta" "loi"}
+  .hero{min-height:420px}.hero h1{font-size:46px!important}
+  .two,.loi-grid{grid-template-columns:minmax(0,1fr)!important}
+  .loi-grid .span2{grid-column:auto!important}
+  .comp-grid{grid-template-columns:minmax(0,1fr) 84px!important}
+  .comp-grid .bar{display:none}
+  .c-rate{display:none}.rate-sm{display:block}
+  #poiList{grid-template-columns:minmax(0,1fr)!important}
+}
+@media print{
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .ko-bg,.no-print{display:none!important}
+  .ko-wrap{padding:0;max-width:none}
+  .t{-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;break-inside:avoid}
+  .au{animation:none}
+  .ko-grid,.ko-grid.has-data{grid-template-areas:"hero hero hero roi" "hero hero hero cash" "hero hero hero cap" "inc inc exp exp" "cmp cmp exp exp" "data data data data" "worth comps comps comps" "map map photos photos" "cta cta cta cta"}
+}
+</style>
+</head>
+<body>
+<div class="ko-bg" id="bg" aria-hidden="true"></div>
+<div class="ko-wrap">
+<header style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px">
+  <div style="display:flex;align-items:center;gap:12px">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15" fill="none" stroke="#D8B256" stroke-width="1.5"/><path d="M17 5 L21 17 L17 29 L13 17 Z" fill="#D8B256"/><circle cx="17" cy="17" r="2.4" fill="#16181C"/></svg>
+    <div><div class="pf" style="font-size:18px;font-weight:700;color:#F4F1E8">One Compass <span style="color:#D8B256">Point</span></div><div class="lbl" style="font-size:10px">Investor priced real estate</div></div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="chip gold">Off-market</span><span class="chip" id="sheetDate">Offering sheet</span><button class="btn ghost no-print" type="button" id="printBtn" style="min-height:36px;padding:0 16px;font-size:11px">Print / save PDF</button></div>
+</header>
+<noscript><p class="t">This offering sheet needs JavaScript to show its figures. Email jaison@onecompasspoint.com for the PDF.</p></noscript>
+
+<main class="ko-grid" id="grid">
+
+  <section class="t hero" id="hero">
+    <div class="frame"></div>
+    <div style="padding:26px"><span class="chip" id="heroTag">Buffalo, NY</span></div>
+    <div class="foot">
+      <h1 class="pf" id="addr" style="font-size:64px;line-height:1;margin:0 0 12px;font-weight:800;color:#F4F1E8;text-wrap:balance"></h1>
+      <p id="blurb" style="margin:0 0 18px;font-size:16px;max-width:560px;color:#C9CCD2"></p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <span class="pf au" id="price" style="font-size:34px;font-weight:900;margin-right:6px"></span>
+        <span class="chip" id="ppu"></span>
+        <span class="chip" id="grm"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="t" style="grid-area:roi;border-color:#8A6D1F">
+    <div class="lbl" id="roiLabel"></div>
+    <div class="pf au" id="roiBig" style="font-size:62px;font-weight:900;line-height:1.05;margin:10px 0 6px"></div>
+    <div id="roiSub" style="font-size:14px;color:#B9BCC3"></div>
+    <div class="bar" style="margin-top:16px"><div class="fill" id="roiBar"></div><div class="tick" style="left:25%"></div><div class="tick" style="left:50%"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#8F939B;margin-top:6px"><span>0</span><span>20% floor</span><span>40% std</span><span>80%</span></div>
+    <span class="pill" id="verdict"></span>
+  </section>
+
+  <section class="t" style="grid-area:cash">
+    <div class="lbl">Net cash / yr · after reserves</div>
+    <div class="pf au" id="netCash" style="font-size:44px;font-weight:800;line-height:1.05;margin-top:8px"></div>
+    <div class="muted" id="netCashSub" style="font-size:14px;margin-top:6px"></div>
+  </section>
+
+  <section class="t" style="grid-area:cap">
+    <div class="lbl">Cap rate · after reserves</div>
+    <div class="pf au" id="cap" style="font-size:44px;font-weight:800;line-height:1.05;margin-top:8px"></div>
+    <div class="muted" id="capSub" style="font-size:14px;margin-top:6px"></div>
+  </section>
+
+  <section class="t" style="grid-area:inc">
+    <h2 class="h2">Income &amp; occupancy</h2>
+    <div class="scroll"><table class="tb">
+      <thead><tr><th>Rent source</th><th class="r">Units</th><th class="r c-rate">Rate / unit</th><th class="r">Monthly</th></tr></thead>
+      <tbody id="incBody"></tbody>
+    </table></div>
+    <p class="note" id="incNote"></p>
+  </section>
+
+  <section class="t" style="grid-area:exp">
+    <h2 class="h2">Operating expenses</h2>
+    <div class="scroll"><table class="tb">
+      <thead><tr><th>Expense</th><th class="r">Annual</th></tr></thead>
+      <tbody id="expBody"></tbody>
+    </table></div>
+    <div class="two" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px">
+      <div style="background:#1C1E23;border:1px solid #34373E;border-radius:18px;padding:14px"><div class="lbl">NOI before reserve</div><div class="pf" id="noiPre" style="font-size:24px;font-weight:700;color:#F4F1E8"></div></div>
+      <div style="background:linear-gradient(100deg,#8A6D1F,#D8B256 60%,#E8CF8A);color:#14161A;border-radius:18px;padding:14px"><div class="lbl" style="color:#3A2E10">Net cash after reserve</div><div class="pf" id="netCash2" style="font-size:24px;font-weight:800"></div></div>
+    </div>
+    <p class="note" id="expNote"></p>
+  </section>
+
+  <section class="t" style="grid-area:cmp">
+    <h2 class="h2">Two ways to buy it</h2>
+    <div class="two" id="cards" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px"></div>
+    <p id="cmpNote" style="margin:14px 0 0;font-size:14px;color:#DCDAD2"></p>
+  </section>
+
+  <section class="dw" id="dataWrap">
+    <div class="t dp" id="rrCard">
+      <h2 class="h2">Rent roll</h2>
+      <div class="scroll"><table class="tb">
+        <thead><tr><th>Unit</th><th>Beds / baths</th><th>Program</th><th class="r">Rent</th><th class="r">Lease ends</th></tr></thead>
+        <tbody id="rrBody"></tbody>
+      </table></div>
+    </div>
+    <div class="t dp" id="t12Card">
+      <h2 class="h2">Trailing 12 months</h2>
+      <div id="t12Period" style="font-size:12px;letter-spacing:.08em;color:#9BA0A8;margin:-8px 0 10px"></div>
+      <div class="scroll"><table class="tb">
+        <thead><tr><th>Line</th><th class="r">Actual</th><th class="r">Sheet</th><th class="r">Diff</th></tr></thead>
+        <tbody id="t12Body"></tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <section class="t" style="grid-area:worth;border-color:#8A6D1F;background:linear-gradient(180deg,rgba(216,178,86,.12),rgba(26,28,33,.9))">
+    <div class="lbl" style="color:#D8B256">What these terms are worth</div>
+    <div class="pf au" id="worthBig" style="font-size:50px;font-weight:900;line-height:1.05;margin:10px 0 6px"></div>
+    <p id="worthText" style="margin:0 0 14px;font-size:14px;color:#DCDAD2"></p>
+    <div id="worthRows" style="display:flex;flex-direction:column;gap:8px;font-size:13px"></div>
+    <p id="worthNote" style="margin:12px 0 0;font-size:12px;color:#9BA0A8"></p>
+  </section>
+
+  <section class="t" style="grid-area:comps">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><h2 class="h2">Comps · price per unit</h2><span class="lbl" id="compsTag"></span></div>
+    <div class="comp-grid" id="compsRows" style="display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) 84px;gap:10px 14px;align-items:center;font-size:13px"></div>
+    <p class="note" id="compsNote" style="margin-top:14px"></p>
+  </section>
+
+  <section class="t" style="grid-area:map">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><h2 class="h2">Location</h2><span class="lbl">Straight-line distances</span></div>
+    <div id="map" role="img" aria-label="Map of the property and nearby amenities"></div>
+    <ol id="poiList" style="margin:14px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 16px;font-size:13px"></ol>
+  </section>
+
+  <section class="t" style="grid-area:photos">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><h2 class="h2">Inside</h2><a class="lbl" id="photoLink" target="_blank" rel="noopener" style="color:#D8B256"></a></div>
+    <div id="inside" class="two" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px"></div>
+  </section>
+
+  <section class="t" style="grid-area:cta;border-color:#8A6D1F;display:flex;flex-direction:column;gap:14px">
+    <div class="lbl" style="color:#D8B256">Entry terms</div>
+    <p class="pf" id="entryLine" style="margin:0;font-size:24px;font-weight:700;line-height:1.25;color:#F4F1E8"></p>
+    <p style="margin:0;font-size:14px;color:#B9BCC3">Full rent roll and leases on request.</p>
+    <a class="btn no-print" id="rrBtn" href="#">Request the rent roll</a>
+    <div id="email" style="font-size:13px;color:#9BA0A8;user-select:all"></div>
+  </section>
+
+  <section class="t no-print" style="grid-area:loi" id="loiCard">
+    <h2 class="h2">Submit a letter of intent</h2>
+    <p style="margin:-6px 0 16px;font-size:14px;color:#9BA0A8">Name your offer and attach proof of funds, statements or ID. We reply within one business day.</p>
+    <form id="loi" class="loi-grid" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px">
+      <div class="fld"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" required></div>
+      <div class="fld"><label for="email-in">Email</label><input id="email-in" name="email" type="email" autocomplete="email" required></div>
+      <div class="fld"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
+      <div class="fld"><label for="amount">Offer amount ($)</label><input id="amount" name="amount" inputmode="numeric"></div>
+      <div class="fld"><label for="structure">Structure</label><select id="structure" name="structure"></select></div>
+      <div class="fld"><label for="closing">Target closing</label><input id="closing" name="closing" placeholder="45 days"></div>
+      <div class="fld span2" style="grid-column:span 2"><label for="notes">Terms, notes, questions</label><textarea id="notes" name="notes" rows="3"></textarea></div>
+      <div class="fld"><label for="docs">Documents · PDF, JPG, PNG · 2.5 MB each</label><input id="docs" name="docs" type="file" multiple accept=".pdf,.jpg,.jpeg,.png" style="padding:9px"><div id="doclist" style="font-size:12px;color:#9BA0A8"></div></div>
+      <div style="grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><span id="loiMsg" role="status" style="font-size:13px;color:#D8B256"></span><button class="btn" type="submit" id="loiBtn">Send letter of intent</button></div>
+    </form>
+  </section>
+
+</main>
+
+<footer id="disclaimer" style="margin-top:22px;font-size:11.5px;color:#7D828B;font-style:italic;max-width:900px;line-height:1.6"></footer>
+<div class="lbl" style="text-align:center;margin-top:18px;color:#6F747D">One Compass Point · onecompasspoint.com</div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ===================== DEAL CONFIG (edit per deal) ===================== */
+var CONFIG = {
+  sheetDate: 'Oct 2026',
+  address: '387 Busti Ave',
+  shortName: 'Busti',
+  heroTag: 'Buffalo, NY 14201 · West Side',
+  blurb: 'Nine-unit brick walk-up, built 1910. Four Section 8 units at the BMHA payment standard, five market-rate. Tenants pay electric.',
+  units: 9,
+  yearBuilt: 1910,
+  price: 565000,
+  income: [
+    { k: 'Section 8 · BMHA 14201 payment standard', units: 4, rate: '$1,099–$1,297', monthly: 4792 },
+    { k: 'Market-rate renters', units: 5, rate: '$1,000–$1,250', monthly: 5500 }
+  ],
+  vacancy: 0.04,
+  incomeNote: 'Section 8 pays on time, which keeps blended vacancy at 4%.',
+  opex: [
+    { k: 'Property taxes (Erie County)', annual: 6000 },
+    { k: 'Insurance', annual: 7200 },
+    { k: 'Water / sewer (tenants pay electric)', annual: 4050 },
+    { k: 'Maintenance & repairs', annual: 8100 },
+    { k: 'Turnover, legal, marketing', annual: 2700 },
+    { k: 'Property management (8% of EGI)', pctOfEGI: 0.08 }
+  ],
+  reservePerUnit: 1500,
+  reserveLabel: 'Capital reserve · roof, HVAC, appliances, paint',
+  // Creative terms: null = not offered (today). Example when a seller agrees:
+  // creative: { type: 'Seller financing', down: 8, rate: 5.5, years: 30 }
+  // Subject-to: down = (price - existing loan balance) / price * 100; rate and years from the existing note.
+  terms: { creative: null, bank: { down: 20, rate: 8, years: 30 } },
+  // Optional. Leave empty and the sections hide.
+  // rentRoll rows: { unit: '1', bb: '2 bd / 1 ba', prog: 'Section 8', rent: 1199, lease: 'Jun 2027' }
+  rentRoll: [],
+  // t12: { period: 'Nov 2025 – Oct 2026', income: 115900, lines: [ { k: 'Property taxes', a: 6000, p: 6000 }, ... ] }
+  // income = actual collected; "p" = this sheet's figure for the same line.
+  t12: null,
+  comps: {
+    tag: 'Active 5+ unit listings · 14201',
+    source: 'Homes.com', date: 'Oct 31, 2026', basis: 'Asking prices, not closed sales.',
+    rows: [
+      { a: '87 Plymouth Ave', u: 5, p: 389000 },
+      { a: '337 Prospect Ave', u: 6, p: 585000 },
+      { a: '4 Saint Johns Pl', u: 5, p: 545000 },
+      { a: '197 Virginia St', u: 14, p: 1750000 },
+      { a: '176 North St', u: 11, p: 1699000 },
+      { a: '282 Jersey St', u: 7, p: 1100000 },
+      { a: '68 Days Park', u: 21, p: 3500000 },
+      { a: '83 Prospect Ave', u: 5, p: 1000000 }
+    ]
+  },
+  photos: {
+    main: '/photos/busti9/1793220528643.jpg',
+    inside: [
+      { src: '/photos/busti9/IMG_7046.jpeg', cap: 'Kitchen' },
+      { src: '/photos/busti9/IMG_7053.jpeg', cap: 'Bath' },
+      { src: '/photos/busti9/IMG_7073.jpeg', cap: 'Stair hall' },
+      { src: '/photos/busti9/Screenshot_2026-10-28_at_3.04.37 PM.png', cap: 'Electric meter bank' }
+    ],
+    count: 84,
+    drive: 'https://drive.google.com/drive/folders/1etphvbbg80PzkJN_K6z2JZEriyGlMqi7'
+  },
+  map: {
+    home: [42.90264, -78.89503],
+    pois: [
+      ['NFTA bus · Niagara St', [42.9050, -78.8930]],
+      ['West Side Market', [42.9050, -78.8918]],
+      ['Neighborhood schools (BPS)', [42.9036, -78.8902]],
+      ['Tops Friendly Markets', [42.9074, -78.8955]],
+      ['Front Park · riverfront', [42.9135, -78.9042]],
+      ['Amtrak · Exchange St', [42.9078, -78.8760]],
+      ['Buffalo General / Oishei', [42.9012, -78.8736]],
+      ['NFTA Metro Rail · Main St', [42.9080, -78.8590]],
+      ['Buffalo Niagara Intl. (BUF)', [42.9394, -78.7341]]
+    ]
+  },
+  email: 'jaison@onecompasspoint.com'
+};
+/* ================= end CONFIG; everything below is computed ================= */
+
+(function () {
+  var C = CONFIG;
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function money(n) { return (n < 0 ? '−$' : '$') + Math.round(Math.abs(n)).toLocaleString('en-US'); }
+  function thou(n) { return '$' + Math.round(n / 1000).toLocaleString('en-US') + 'K'; }
+  function pct(n) { return isFinite(n) ? (n * 100).toFixed(1) + '%' : 'n/a'; }
+  function pct0(n) { return Math.round(n * 100) + '%'; }
+  function kAnnual(rate, years) { var m = rate / 1200, n = years * 12; return m === 0 ? 12 / n : (m / (1 - Math.pow(1 + m, -n))) * 12; }
+
+  // ---- Operating statement ----
+  var gprM = C.income.reduce(function (s, r) { return s + r.monthly; }, 0);
+  var gpr = gprM * 12, vacM = gprM * C.vacancy, egi = gpr * (1 - C.vacancy);
+  var opexRows = C.opex.map(function (o) { return { k: o.k, v: o.pctOfEGI ? Math.round(egi * o.pctOfEGI) : o.annual }; });
+  var opex = opexRows.reduce(function (s, r) { return s + r.v; }, 0);
+  var reserve = C.reservePerUnit * C.units;
+  var noi = egi - opex, net = noi - reserve, totalExp = opex + reserve;
+  var PRICE = C.price;
+
+  // ---- Terms ----
+  function path(name, t) {
+    var k = kAnnual(t.rate, t.years), d = t.down / 100, cash = PRICE * d, ds = (PRICE - cash) * k, cf = net - ds;
+    return { name: name, t: t, d: d, k: k, cash: cash, ds: ds, cf: cf, coc: cf / cash, dscr: net / ds,
+      max: function (target) { return net / ((1 - d) * k + target * d); } };
+  }
+  var bank = path('Bank', C.terms.bank);
+  var cr = C.terms.creative;
+  var cre = cr ? path(cr.type, cr) : null;
+  var creBetter = !!cre && (cre.coc - bank.coc) * 100 >= 5 && cre.cash <= 0.6 * bank.cash;
+  var lead = creBetter ? cre : bank;
+
+  // ---- Header / hero ----
+  $('sheetDate').textContent = 'Offering sheet · ' + C.sheetDate;
+  var bgUrl = 'url("' + encodeURI(C.photos.main) + '")';
+  $('bg').style.backgroundImage = bgUrl;
+  $('hero').style.backgroundImage = bgUrl;
+  $('heroTag').textContent = C.heroTag;
+  $('addr').textContent = C.address;
+  $('blurb').textContent = C.blurb;
+  $('price').textContent = money(PRICE);
+  $('ppu').textContent = money(PRICE / C.units) + ' per unit';
+  $('grm').textContent = (PRICE / gpr).toFixed(1) + '× gross rent';
+
+  // ---- ROI ----
+  $('roiLabel').textContent = 'Investor ROI · ' + (creBetter ? cr.type.toLowerCase() : 'bank terms');
+  $('roiBig').textContent = pct(lead.coc);
+  $('roiSub').textContent = creBetter
+    ? 'cash-on-cash · bank terms return ' + pct(bank.coc)
+    : 'cash-on-cash · ' + bank.t.down + '% down at ' + bank.t.rate + '% · all cash returns ' + pct(net / PRICE);
+  $('roiBar').style.width = Math.max(0, Math.min(100, lead.coc / 0.8 * 100)).toFixed(1) + '%';
+  var v = $('verdict');
+  if (lead.coc >= 0.4) { v.textContent = 'Clears the 40% standard'; v.className = 'pill std'; }
+  else if (lead.coc >= 0.2) { v.textContent = 'Clears the 20% floor'; v.className = 'pill floor'; }
+  else { v.textContent = 'Under the 20% floor'; v.className = 'pill under'; }
+
+  // ---- Net cash / cap ----
+  $('netCash').textContent = money(net);
+  $('netCash2').textContent = money(net);
+  $('netCashSub').textContent = money(net / 12) + ' a month, after a ' + money(reserve) + ' capital reserve';
+  $('cap').textContent = pct(net / PRICE);
+  $('capSub').textContent = pct(noi / PRICE) + ' on strict NOI, shown for reference';
+
+  // ---- Income ----
+  var inc = C.income.map(function (r) {
+    return '<tr><td>' + esc(r.k) + '<div class="rate-sm">' + esc(r.rate) + ' per unit</div></td><td class="r">' + r.units + '</td><td class="r c-rate">' + esc(r.rate) + '</td><td class="r">' + money(r.monthly) + '</td></tr>';
+  }).join('');
+  inc += '<tr class="sub"><td>Gross potential rent</td><td class="r">' + C.units + '</td><td class="r c-rate"></td><td class="r">' + money(gprM) + '</td></tr>';
+  inc += '<tr><td>Vacancy &amp; collection (' + pct0(C.vacancy) + ' blended)</td><td class="r"></td><td class="r c-rate"></td><td class="r">(' + money(vacM) + ')</td></tr>';
+  inc += '<tr class="tot"><td>Effective gross income</td><td class="r"></td><td class="r c-rate"></td><td class="r">' + money(egi / 12) + '</td></tr>';
+  $('incBody').innerHTML = inc;
+  $('incNote').textContent = money(egi) + ' a year. ' + (C.incomeNote || '');
+
+  // ---- Expenses ----
+  var ex = opexRows.map(function (r) { return '<tr><td>' + esc(r.k) + '</td><td class="r">' + money(r.v) + '</td></tr>'; }).join('');
+  ex += '<tr class="res"><td>' + esc(C.reserveLabel) + ' (' + money(C.reservePerUnit) + ' / unit)</td><td class="r">' + money(reserve) + '</td></tr>';
+  ex += '<tr class="tot"><td>Total, reserve included</td><td class="r">' + money(totalExp) + '</td></tr>';
+  $('expBody').innerHTML = ex;
+  $('noiPre').textContent = money(noi);
+  $('expNote').textContent = 'Expenses run ' + pct0(totalExp / egi) + ' of income, ' + money(totalExp / C.units) + ' per unit. The reserve is a real line, sized for a ' + C.yearBuilt + ' building.';
+
+  // ---- Buy paths ----
+  function card(label, p, isLead) {
+    var hasDebt = p.ds > 0;
+    return '<div class="card' + (isLead ? ' lead' : '') + '">' +
+      '<div class="lbl"' + (isLead ? ' style="color:#D8B256"' : '') + '>' + esc(label) + '</div>' +
+      '<div class="pf roi' + (isLead ? ' au' : '') + '">' + pct(p.coc) + '</div>' +
+      '<table class="tb" style="font-size:13px"><tbody>' +
+      '<tr><td>Cash in</td><td class="r">' + money(p.cash) + '</td></tr>' +
+      '<tr><td>Debt service</td><td class="r">' + (hasDebt ? money(p.ds) : 'None') + '</td></tr>' +
+      '<tr><td>Cash flow</td><td class="r">' + money(p.cf) + '</td></tr>' +
+      '<tr class="last"><td>DSCR</td><td class="r">' + (hasDebt ? p.dscr.toFixed(2) + '×' : 'No debt') + '</td></tr>' +
+      '</tbody></table></div>';
+  }
+  var bankLabel = 'Bank · ' + bank.t.down + '% down @ ' + bank.t.rate + '%';
+  var cmpNote;
+  if (cre) {
+    var creLabel = cr.type + ' · ' + cr.down + '% down @ ' + cr.rate + '%';
+    $('cards').innerHTML = card(bankLabel, bank, !creBetter) + card(creLabel, cre, creBetter);
+    cmpNote = creBetter
+      ? cr.type + ' needs ' + pct0(1 - cre.cash / bank.cash) + ' less cash (' + money(bank.cash - cre.cash) + ' saved) and returns ' + (cre.coc / bank.coc).toFixed(1) + '× the bank path. Both run on the same ' + money(net) + ' net cash.'
+      : 'On these terms ' + cr.type.toLowerCase() + ' returns ' + pct(cre.coc) + ' against ' + pct(bank.coc) + ' at the bank. Both run on the same ' + money(net) + ' net cash.';
+  } else {
+    var cashPath = { coc: net / PRICE, cash: PRICE, ds: 0, cf: net, dscr: Infinity };
+    $('cards').innerHTML = card('All cash', cashPath, false) + card(bankLabel, bank, true);
+    cmpNote = 'Offered for cash or conventional financing. Leverage at ' + bank.t.down + '% down lifts the return from ' + pct(net / PRICE) + ' to ' + pct(bank.coc) + '.';
+  }
+  $('cmpNote').textContent = cmpNote;
+
+  // ---- What the terms are worth ----
+  var m40 = lead.max(0.4);
+  $('worthBig').textContent = thou(m40);
+  $('worthText').textContent = 'The highest price ' + (creBetter ? cr.type.toLowerCase() : 'bank') + ' terms carry and still return 40%.';
+  var wr = creBetter
+    ? [['Bank terms at 40%', thou(bank.max(0.4))], [cr.type + ' at the 20% floor', thou(cre.max(0.2))]]
+    : [['Bank terms at the 20% floor', thou(bank.max(0.2))], ['All cash at asking', pct(net / PRICE)]];
+  wr.push(['Asking', thou(PRICE)]);
+  $('worthRows').innerHTML = wr.map(function (r, i) {
+    var last = i === wr.length - 1;
+    return '<div style="display:flex;justify-content:space-between;gap:8px' + (last ? ';border-top:1px solid #8A6D1F;padding-top:8px' : '') + '"><span>' + esc(r[0]) + '</span><strong class="pf"' + (last ? ' style="color:#D8B256"' : '') + '>' + esc(r[1]) + '</strong></div>';
+  }).join('');
+  $('worthNote').textContent = m40 >= PRICE
+    ? 'Asking leaves ' + thou(m40 - PRICE) + ' of room under the 40% price on these terms.'
+    : 'Asking is ' + thou(PRICE - m40) + ' above the 40% price on these terms.';
+
+  // ---- Comps ----
+  var subjPU = PRICE / C.units;
+  var rows = C.comps.rows.map(function (c) { return { a: c.a, u: c.u, pu: c.p / c.u }; }).sort(function (a, b) { return a.pu - b.pu; });
+  var maxPU = Math.max(subjPU, rows.length ? rows[rows.length - 1].pu : 0);
+  var pus = rows.map(function (r) { return r.pu; });
+  var median = pus.length ? (pus.length % 2 ? pus[(pus.length - 1) / 2] : (pus[pus.length / 2 - 1] + pus[pus.length / 2]) / 2) : 0;
+  function compRow(label, pu, subj) {
+    return '<div style="' + (subj ? 'font-weight:600;color:#D8B256' : 'color:#C9CCD2') + '">' + esc(label) + '</div>' +
+      '<div class="bar" style="height:14px"><div class="fill' + (subj ? '' : ' grey') + '" style="width:' + (pu / maxPU * 100).toFixed(1) + '%"></div></div>' +
+      '<div class="pf" style="text-align:right;' + (subj ? 'font-weight:700;color:#D8B256' : 'color:#DCDAD2') + '">' + money(pu) + '</div>';
+  }
+  $('compsTag').textContent = C.comps.tag;
+  $('compsRows').innerHTML = compRow(C.address + ' · ' + C.units + 'u', subjPU, true) + rows.map(function (r) { return compRow(r.a + ' · ' + r.u + 'u', r.pu, false); }).join('');
+  var cn = '';
+  if (median) cn += (C.shortName || 'This property') + ' is offered at ' + pct0(subjPU / median) + ' of the ' + money(median) + ' median ask';
+  if (pus.length && subjPU < pus[0]) cn += ' and ' + pct0(1 - subjPU / pus[0]) + ' under the lowest listing';
+  $('compsNote').textContent = cn + '. Source: ' + C.comps.source + ', ' + C.comps.date + '. ' + C.comps.basis;
+
+  // ---- Rent roll / T-12 (hidden when empty) ----
+  var hasRR = C.rentRoll && C.rentRoll.length > 0, hasT12 = !!C.t12;
+  if (hasRR) {
+    var rrTot = 0;
+    $('rrBody').innerHTML = C.rentRoll.map(function (r) { rrTot += r.rent; return '<tr><td>' + esc(r.unit) + '</td><td>' + esc(r.bb || '') + '</td><td>' + esc(r.prog || '') + '</td><td class="r">' + money(r.rent) + '</td><td class="r">' + esc(r.lease || '') + '</td></tr>'; }).join('') +
+      '<tr class="tot"><td>' + C.rentRoll.length + ' units</td><td></td><td></td><td class="r">' + money(rrTot) + '</td><td class="r">per month</td></tr>';
+    $('rrCard').classList.add('on');
+  }
+  if (hasT12) {
+    var t = C.t12, ea = 0, ep = 0;
+    function dm(n) { return (n > 0 ? '+' : '') + money(n); }
+    var body = '<tr><td>Income collected</td><td class="r">' + money(t.income) + '</td><td class="r">' + money(egi) + '</td><td class="r">' + dm(t.income - egi) + '</td></tr>';
+    body += t.lines.map(function (l) { ea += l.a; ep += l.p; return '<tr><td>' + esc(l.k) + '</td><td class="r">' + money(l.a) + '</td><td class="r">' + money(l.p) + '</td><td class="r">' + dm(l.a - l.p) + '</td></tr>'; }).join('');
+    body += '<tr class="tot"><td>NOI before reserve</td><td class="r">' + money(t.income - ea) + '</td><td class="r">' + money(egi - ep) + '</td><td class="r">' + dm((t.income - ea) - (egi - ep)) + '</td></tr>';
+    $('t12Body').innerHTML = body;
+    $('t12Period').textContent = t.period + ' · actual against this sheet';
+    $('t12Card').classList.add('on');
+  }
+  if (hasRR || hasT12) { $('dataWrap').classList.add('on'); $('grid').classList.add('has-data'); }
+
+  // ---- Map ----
+  var R = 6371, rad = Math.PI / 180;
+  function km(a, b) { var d = (b[0] - a[0]) * rad, e = (b[1] - a[1]) * rad, h = Math.sin(d / 2) * Math.sin(d / 2) + Math.cos(a[0] * rad) * Math.cos(b[0] * rad) * Math.sin(e / 2) * Math.sin(e / 2); return 2 * R * Math.asin(Math.sqrt(h)); }
+  var home = C.map.home;
+  $('poiList').innerHTML = C.map.pois.map(function (p, i) {
+    var d = km(home, p[1]);
+    var g = 'https://www.google.com/maps/dir/' + home[0] + ',' + home[1] + '/' + p[1][0] + ',' + p[1][1];
+    return '<li style="display:flex;gap:8px;min-width:0"><span class="pf" style="color:#D8B256;min-width:14px">' + (i + 1) + '</span><a href="' + g + '" target="_blank" rel="noopener" style="flex:1;min-width:0;color:#E9E6DE">' + esc(p[0]) + '</a><span style="color:#8F939B;white-space:nowrap">' + d.toFixed(1) + ' km</span></li>';
+  }).join('');
+  if (window.L) {
+    var map = L.map('map', { scrollWheelZoom: false }).setView(home, 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
+    L.circle(home, { radius: 500, color: '#D8B256', weight: 1, fillColor: '#D8B256', fillOpacity: 0.06 }).addTo(map);
+    L.circle(home, { radius: 1000, color: '#8A6D1F', weight: 1, fill: false }).addTo(map);
+    L.marker(home, { icon: L.divIcon({ className: '', html: '<div class="home"></div>', iconSize: [18, 18], iconAnchor: [9, 9] }), title: C.address }).addTo(map).bindPopup('<b>' + esc(C.address) + '</b>');
+    C.map.pois.forEach(function (p, i) {
+      L.marker(p[1], { icon: L.divIcon({ className: '', html: '<div class="poi">' + (i + 1) + '</div>', iconSize: [20, 20], iconAnchor: [10, 10] }), title: p[0] }).addTo(map).bindPopup('<b>' + esc(p[0]) + '</b>');
+    });
+  } else {
+    $('map').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#9BA0A8;font-size:13px">Map unavailable. See the distances below.</div>';
+  }
+
+  // ---- Photos ----
+  $('inside').innerHTML = C.photos.inside.map(function (p, i) {
+    return '<div class="ph" style="min-height:' + (i < 2 ? 190 : 150) + 'px"><img src="' + encodeURI(p.src) + '" alt="' + esc(p.cap) + '"><span>' + esc(p.cap) + '</span></div>';
+  }).join('');
+  var pl = $('photoLink');
+  pl.textContent = 'All ' + C.photos.count + ' photos';
+  pl.href = C.photos.drive;
+
+  // ---- Entry terms / contact / LOI options ----
+  $('entryLine').textContent = cre ? 'Cash, conventional, or ' + cr.type.toLowerCase() + '.' : 'Cash or conventional financing.';
+  $('email').textContent = C.email;
+  $('rrBtn').href = 'mailto:' + C.email + '?subject=' + encodeURIComponent(C.address + ' rent roll');
+  var opts = ['Cash', 'Conventional financing'].concat(cre ? [cr.type] : []);
+  $('structure').innerHTML = '<option value="">Choose one</option>' + opts.map(function (o) { return '<option>' + esc(o) + '</option>'; }).join('');
+  $('amount').placeholder = String(PRICE);
+  $('printBtn').addEventListener('click', function () { window.print(); });
+
+  // ---- Disclaimer ----
+  $('disclaimer').textContent = 'This is an offering summary for evaluation only, not an offer or a guarantee of results. Figures are projections: income from current rents, expenses modeled with an annual capital reserve of ' + money(C.reservePerUnit) + ' per unit for a ' + C.yearBuilt + ' building. ROI is cash-on-cash on the down payment, net of reserves, before closing costs; actual results depend on final inspection, tax review, financing and lease conditions.';
+})();
+</script>
+
+<script>
+/* LOI-FALLBACK: delete this whole block once the ver5 Supabase LOI handler is pasted in.
+   Until then it opens the buyer's email with the offer filled in, so no LOI is lost. */
+(function () {
+    var KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvb2FtYnNhY21ocmxncHdnd3N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE3MTU4NjksImV4cCI6MjA5NzI5MTg2OX0.2votR41Hj8cww9fJgjjQHtdGZkFRYVTwbXYAk_6kkuo"; var URL = "https://tooambsacmhrlgpwgwsv.supabase.co";
+    var f = document.getElementById("loi");
+    var files = [];
+    var doclist = document.getElementById("doclist");
+    var inp = document.getElementById("docs");
+    function fmt(n){ return n > 1048576 ? (n/1048576).toFixed(1)+" MB" : Math.round(n/1024)+" KB"; }
+    inp.addEventListener("change", function (e) {
+      var allowed = Array.prototype.slice.call(inp.files).filter(function (x) { return x.size <= 2.5 * 1048576; });
+      var total = allowed.reduce(function (a, x) { return a + x.size; }, 0);
+      if (total > 8 * 1048576) { doclist.textContent = "Total upload too large (max 8MB). Remove some files and try again."; files = []; return; }
+      files = allowed;
+      var skipped = inp.files.length - files.length;
+      doclist.textContent = files.map(function (x) { return x.name + " (" + fmt(x.size) + ")"; }).join(", ") + (skipped ? "  - " + skipped + " files over 2.5MB omitted" : (files.length ? "" : "No files attached"));
+    });
+    f.addEventListener("submit", function (e) {
+      e.preventDefault(); e.stopPropagation();
+      var btn = document.getElementById("loiBtn"); btn.disabled = true; btn.textContent = "Sending...";
+      var msg = document.getElementById("loiMsg");
+      function readFiles(done) {
+        var out = []; var i = 0;
+        function next() {
+          if (i >= files.length) return done(out);
+          var fr = new FileReader();
+          fr.onload = function () { var b64 = (fr.result || "").split(",")[1] || ""; out.push({ name: files[i].name, size: files[i].size, type: files[i].type, data: b64 }); i++; next(); };
+          fr.onerror = function () { out.push({ name: files[i].name, size: files[i].size, type: files[i].type, error: "unreadable" }); i++; next(); };
+          fr.readAsDataURL(files[i]);
+        }
+        next();
+      }
+      // hierarchical: structured fields only, file data stored in metadata (names+sizes+types); full data via re-read on report
+      var payload = {
+        landing_page_id: "358e74d4-570f-47e8-bafb-00e604fc80b6",
+        name: f.name.value.trim(), email: f.email.value.trim(), phone: f.phone.value.trim() || null,
+        message: "LOI for 387 Busti Ave - " + (f.amount.value ? "$"+Number(f.amount.value).toLocaleString() : "offer TBD") + " / " + (f.structure.value || "structure TBD"),
+        source: "onecompasspoint.com",
+        metadata: { disposition: "buyer", type: "loi", deal: "387 Busti Ave, Buffalo NY 14201",
+          offer_amount: f.amount.value ? Number(f.amount.value) : null,
+          structure: f.structure.value || null, closing: f.closing.value || null,
+          notes: f.notes.value || null,
+          documents: files.map(function (x) { return { name: x.name, size: x.size, type: x.type }; }),
+          page: location.pathname, at: new Date().toISOString() }
+      };
+      fetch(URL + "/rest/v1/page_leads", { method: "POST",
+        headers: { "apikey": KEY, "Authorization": "Bearer " + KEY, "Content-Type": "application/json", "Prefer": "return=minimal" },
+        body: JSON.stringify(payload) })
+        .then(function (r) { if (r.ok || r.status === 201) { msg.style.color = "#2c7a7b"; msg.textContent = "LOI received - we'll reply within one business day."; f.reset(); doclist.textContent = ""; files = []; } else { throw 0; } })
+        .catch(function () { msg.style.color = "#c0392b"; msg.textContent = "Something went wrong sending. Please try again or email jaison@onecompasspoint.com."; })
+        .then(function () { btn.disabled = false; btn.textContent = "Submit Letter of Intent"; });
+    });
+  })();
+
+</script>
+</body>
+</html>
