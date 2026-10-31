@@ -212,10 +212,13 @@ def main():
     phr = os.path.join(REPO, "properties.html")
     if os.path.exists(phr):
         ph = open(phr, encoding="utf-8").read()
-        if "/*DEALS_INLINE*/" in ph:
-            ph = ph.replace("window.OCP_DEALS = /*DEALS_INLINE*/;",
-                            "window.OCP_DEALS = " + json.dumps(listings, ensure_ascii=False) + ";", 1)
-            open(phr, "w", encoding="utf-8").write(ph)
+        # always refresh the inline deals (regex, standalone line) - a one-shot
+        # marker replaced once left the inline stale on later runs.
+        _nb = re.subn(r"window\.OCP_DEALS = \[.*?\];",
+                      "window.OCP_DEALS = " + json.dumps(listings, ensure_ascii=False) + ";",
+                      ph, count=1, flags=re.S)
+        if _nb[1]:
+            open(phr, "w", encoding="utf-8").write(_nb[0])
     print(f"signed listings: {len(listings)}  (newest first)")
     if old == new:
         print("properties.json unchanged - nothing to publish")
