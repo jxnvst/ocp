@@ -101,7 +101,13 @@
       "/photos/busti9/Screenshot_2026-10-28_at_3.04.37\u202fPM.png",
       "/photos/busti9/main_9unit.jpg"
     ],
-    "cover": 83
+    "cover": 83,
+    "offering": {
+      "cap": "8.1% @ $1.0M",
+      "pdf": "deals/387-busti-offering.pdf",
+      "noi_yr": 81029,
+      "gross_mo": 10292
+    }
   },
   {
     "title": "109 Eldredge Ave Nw, Orting, WA 98360",
@@ -122,6 +128,7 @@
     "photos": [
       "/photos/sat/d92ef5ea186248.jpg"
     ],
-    "cover": 0
+    "cover": 0,
+    "offering": null
   }
 ]

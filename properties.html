@@ -92,6 +92,32 @@
         }
       });
 
+      // offering sheet strip: NOI / cap / button (matches the PDF, buyer-facing)
+      if (p.offering && (p.offering.noi_yr || p.offering.cap || p.offering.pdf)) {
+        var infoEl = card.querySelector(".property-info-wrap");
+        if (infoEl) {
+          var off = document.createElement("div");
+          off.style.cssText = "margin-top:12px;border-top:1px solid #edf2f7;padding-top:12px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;";
+          var frag = "";
+          if (p.offering.noi_yr) frag += '<div><div class="small-text color-grey-400" style="font-size:11px">NOI / yr</div><div class="basic-text bold">$' + money(p.offering.noi_yr) + '</div></div>';
+          if (p.offering.gross_mo) frag += '<div><div class="small-text color-grey-400" style="font-size:11px">Gross / mo</div><div class="basic-text bold">$' + money(p.offering.gross_mo) + '</div></div>';
+          if (p.offering.cap) frag += '<div><div class="small-text color-grey-400" style="font-size:11px">Cap</div><div class="basic-text bold">' + p.offering.cap + '</div></div>';
+          if (p.offering.pdf) frag += '<div style="margin-left:auto"><button type="button" class="offering-btn">Offering Sheet</button></div>';
+          off.innerHTML = frag;
+          infoEl.appendChild(off);
+          if (p.offering.pdf) {
+            var ob = off.querySelector(".offering-btn");
+            if (ob) {
+              ob.style.cssText = "background:#319795;color:#fff;border:0;border-radius:8px;padding:9px 16px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;";
+              ob.addEventListener("click", function (e) {
+                e.preventDefault(); e.stopPropagation();
+                window.open(p.offering.pdf, "_blank");
+              });
+            }
+          }
+        }
+      }
+
       // carousel: click left/right of the main photo to cycle (no thumbnail strip - clean site)
       if (p.photos && p.photos.length > 1) {
         var info = card.querySelector(".property-info-wrap");
