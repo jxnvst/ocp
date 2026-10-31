@@ -13,6 +13,10 @@ OUT = "/home/ubuntu/onecompass-deploy/om-templates"
 T = "387 Busti Ave &mdash; 9-Unit Multifamily"
 S = "Buffalo, NY 14201 &middot; West Side &middot; Off-Market Offering"
 PRICE, NET, CAP, ROI, RB = "565,000", "67,529", "12.0", "71%", "24.5%"
+PH="http://www.onecompasspoint.com/photos/busti9/main_9unit.jpg"
+GAL=["http://www.onecompasspoint.com/photos/busti9/1793220531697.jpg","http://www.onecompasspoint.com/photos/busti9/IMG_7021.jpeg","http://www.onecompasspoint.com/photos/busti9/IMG_7024.jpeg"]
+PHERO='<div style="width:100%;max-height:330px;overflow:hidden;border-bottom:1px solid var(--line)"><img src="PH" style="width:100%%;max-height:330px;object-fit:cover;display:block" alt="387 Busti Ave"></div>'
+
 
 # archetype: (name, bg, ink, mute, line, acc, acc2, radius, mono, serifHdg, extras)
 A = [
@@ -186,13 +190,15 @@ def body_data(arche, data, hero):
 <p class=warn>Evaluation summary, not an offer. Projections with $1,500/unit annual capital reserve.</p>"""
 
 def build(i, arche, hero, data):
-    css=sheet_css(arche, hero, data)
-    h=hero_html(arche, hero)
-    tag, st=stats(hero, data, arche)
-    if tag=="SIDEBAR":
-        body=body_data(arche, data, hero)
-        return f'<!doctype html><html lang=en><head><meta charset=utf-8><title>OM-{i:02d} | {T}</title><style>{css}</style></head><body><div class="sheet">{h}{st}{body}</div></div></body></html>'
-    inner = f'{h}{st}<div style="padding:6px 30px 26px">{body_data(arche,data,hero)}<div class="foot">One Compass Point &middot; Investor Priced Real Estate</div></div>'
+    css = sheet_css(arche, hero, data)
+    h = hero_html(arche, hero)
+    phh = PHERO.replace("%PH2%", PH)
+    gm = gal_map.replace("%PH%", PH).replace("%G0%", GAL[0]).replace("%G1%", GAL[1]).replace("{I}", str(i))
+    tag, st = stats(hero, data, arche)
+    if tag == "SIDEBAR":
+        body = body_data(arche, data, hero)
+        return f'<!doctype html><html lang=en><head><meta charset=utf-8><title>OM-{i:02d} | {T}</title><style>{css}</style></head><body><div class="sheet">{h}{phh}{st}{body}{gm}<div class="foot">One Compass Point</div></div></div></body></html>'
+    inner = f'{h}{phh}{st}<div style="padding:6px 30px 26px">{body_data(arche,data,hero)}{gm}<div class="foot">One Compass Point &middot; Investor Priced Real Estate</div></div>'
     return f'<!doctype html><html lang=en><head><meta charset=utf-8><title>OM-{i:02d} | {T}</title><style>{css}</style></head><body><div class="sheet">{inner}</div></body></html>'
 
 def main():
