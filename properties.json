@@ -11,7 +11,7 @@
     "beds": null,
     "baths": null,
     "sqft": 6720,
-    "price": null,
+    "price": 565000,
     "arv": null,
     "property_tax": null,
     "closed": "2026-10-24",
@@ -104,7 +104,7 @@
     "cover": 83,
     "offering": {
       "cap": "14.3% @ $565K",
-      "pdf": "deals/387-busti-offering-ver4.html",
+      "pdf": "deals/387-busti-offering-ver5.html",
       "price": 565000,
       "noi_yr": 81029,
       "gross_mo": 10292
