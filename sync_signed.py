@@ -154,13 +154,14 @@ def pull_drive_folder(folder_id, dest):
         shutil.rmtree(tmp, ignore_errors=True)
 
 def main():
-    rows = fetch(f"{SUPABASE_URL}/opportunities?select=id,address,city,state,zip,title,property_type,units,beds,baths,sqft,photo_url,purchase_price,listing_price,manual_sell_price,arv,property_tax,status,created_at,closed_at,county,latitude,longitude&agency_id=eq.{ORION}&status=eq.signed&order=closed_at.desc")
+    rows = fetch(f"{SUPABASE_URL}/opportunities?select=id,address,city,state,zip,title,property_type,units,beds,baths,sqft,photo_url,purchase_price,listing_price,manual_sell_price,arv,property_tax,status,created_at,closed_at,county,latitude,longitude,data&agency_id=eq.{ORION}&status=eq.signed&order=closed_at.desc")
     listings = []
     for r in rows:
         price = r.get("purchase_price") or r.get("listing_price") or r.get("manual_sell_price")
         closed = r.get("closed_at") or r.get("created_at") or ""
         units = r.get("units")
         ptype = r.get("property_type") or (f"{units}-Unit" if units else "")
+        offering = (r.get("data") or {}).get("offering") or None
         photos = []
         cover = 0
         if "Busti" in (r.get("address") or ""):
@@ -195,6 +196,7 @@ def main():
             "closed": (closed or "")[:10],
             "photos": photos,
             "cover": cover,
+            "offering": offering,
         })
     process_drive_links(listings)
     # drop the internal id before publishing
