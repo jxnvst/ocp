@@ -1,5 +1,27 @@
 [
   {
+    "title": "109 Eldredge Ave Nw, Orting, WA 98360",
+    "address": "109 Eldredge Ave Nw, Orting, WA 98360",
+    "city": "Orting",
+    "state": "WA",
+    "zip": "98360",
+    "county": "Pierce County",
+    "property_type": "SFR",
+    "units": null,
+    "beds": 5,
+    "baths": 2.0,
+    "sqft": 2296,
+    "price": 410000,
+    "arv": 590000.0,
+    "property_tax": null,
+    "closed": "2026-08-20",
+    "photos": [
+      "/photos/sat/d92ef5ea186248.jpg"
+    ],
+    "cover": 0,
+    "offering": null
+  },
+  {
     "title": "387 Busti Ave, Buffalo, NY 14201 - 9 unit (off-market)",
     "address": "387 Busti Ave, Buffalo, NY 14201",
     "city": null,
@@ -109,27 +131,5 @@
       "noi_yr": 81029,
       "gross_mo": 10292
     }
-  },
-  {
-    "title": "109 Eldredge Ave Nw, Orting, WA 98360",
-    "address": "109 Eldredge Ave Nw, Orting, WA 98360",
-    "city": "Orting",
-    "state": "WA",
-    "zip": "98360",
-    "county": "Pierce County",
-    "property_type": "SFR",
-    "units": null,
-    "beds": 5,
-    "baths": 2.0,
-    "sqft": 2296,
-    "price": 410000,
-    "arv": 590000.0,
-    "property_tax": null,
-    "closed": "2026-08-20",
-    "photos": [
-      "/photos/sat/d92ef5ea186248.jpg"
-    ],
-    "cover": 0,
-    "offering": null
   }
 ]
