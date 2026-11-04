@@ -1,7 +1,7 @@
 [
   {
-    "title": "109 Eldredge Ave Nw, Orting, WA 98360",
-    "address": "109 Eldredge Ave Nw, Orting, WA 98360",
+    "title": "109 Eldredge Ave Nw",
+    "address": "109 Eldredge Ave Nw",
     "city": "Orting",
     "state": "WA",
     "zip": "98360",
@@ -22,7 +22,7 @@
     "offering": null
   },
   {
-    "title": "387 Busti Ave, Buffalo, NY 14201 - 9 unit (off-market)",
+    "title": "387 Busti Ave, Buffalo, NY 14201",
     "address": "387 Busti Ave, Buffalo, NY 14201",
     "city": null,
     "state": null,
